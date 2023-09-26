@@ -1,5 +1,10 @@
+@import 'src/assets/mixins';
+
 .pageHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 50px;
+  padding: 70px 0 30px;
+  border-bottom: 1px solid $color-text-gray;
 }

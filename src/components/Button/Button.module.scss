@@ -5,48 +5,12 @@
 }
 
 .primaryBtn {
-  @include button();
-  background-color: $primary;
-  width: 100%;
-
-  &:active {
-    background-color: $color-8;
-  }
+  @include button($color-btn-primary);
+  background-color: $color-btn-primary;
 }
 
 .secondaryBtn {
-  @include button();
-  background-color: $white;
-  color: $text-primary;
-  box-shadow: $shadow-2;
-  width: 100%;
-
-  &:active {
-    background-color: $color-8;
-    color: $white;
-  }
-}
-
-.disabledBtn {
-  cursor: not-allowed;
-  background-color: $color-4;
-  // pointer-events: none;
-
-  svg > path {
-    fill: $white;
-  }
-
-  &:active {
-    background-color: $color-4;
-
-    svg > path {
-      fill: $white;
-    }
-  }
-
-  &:hover {
-    svg > path {
-      fill: $white;
-    }
-  }
+  @include button($color-btn-secondary);
+  background-color: $color-btn-secondary;
+  color: #000;
 }

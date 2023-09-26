@@ -1,14 +1,14 @@
-import React, { FC, ReactNode } from 'react';
-import styles from './PageHeader.module.scss';
-import Button from 'src/components/Button';
-import { ButtonType } from 'src/utils/@globalTypes';
+import React, { FC, ReactNode } from 'react'
+import styles from './PageHeader.module.scss'
+import Button from 'src/components/Button'
+import { ButtonType } from 'src/utils/@globalTypes'
 
 type PageHeaderProps = {
-  title: string;
-  btnTitle: string;
-  onClick: () => void;
-  children: ReactNode;
-};
+  title: string
+  btnTitle: string
+  onClick: () => void
+  children: ReactNode
+}
 
 const PageHeader: FC<PageHeaderProps> = ({
   title,
@@ -24,7 +24,7 @@ const PageHeader: FC<PageHeaderProps> = ({
       </div>
       <div className={styles.pageContent}>{children}</div>
     </>
-  );
-};
+  )
+}
 
-export default PageHeader;
+export default PageHeader
