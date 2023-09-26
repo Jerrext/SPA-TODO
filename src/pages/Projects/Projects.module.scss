@@ -1,0 +1,31 @@
+@import 'src/assets/mixins';
+
+.header {
+  display: flex;
+  border-bottom: 1px solid $color-text-gray;
+  margin-top: 30px;
+  padding: 0 30px 10px;
+
+  p {
+    @include h5($color-text-gray);
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.title {
+  width: 25%;
+}
+
+.description {
+  width: 50%;
+}
+
+.supervisor {
+  width: 25%;
+}
