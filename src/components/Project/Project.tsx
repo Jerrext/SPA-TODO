@@ -1,6 +1,5 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC } from 'react'
 import styles from './Project.module.scss'
-import { ButtonType } from 'src/utils/@globalTypes'
 import { ArrowIcon } from 'src/assets/icons'
 
 type ProjectProps = {

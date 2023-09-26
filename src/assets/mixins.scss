@@ -29,9 +29,9 @@
   @include typography(600, 50px, 49px, $color);
 }
 
-// @mixin h2($color: $color-text-white) {
-//   @include typography(600, 30px, 37px, $color);
-// }
+@mixin h2($color: $color-text-white) {
+  @include typography(600, 30px, 37px, $color);
+}
 
 // @mixin h3($color: $color-text-white) {
 //   @include typography(500, 20px, 25px, $color);
