@@ -20,4 +20,12 @@ const createSingleProjectRequest = (data: ProjectPayload) => {
   return firstApiAxios.post(`/projects`, data);
 };
 
-export default { getProjectsRequest, createSingleProjectRequest };
+const deleteSingleProjectRequest = (id: number) => {
+  return firstApiAxios.delete(`/projects/${id}`);
+};
+
+export default {
+  getProjectsRequest,
+  createSingleProjectRequest,
+  deleteSingleProjectRequest,
+};

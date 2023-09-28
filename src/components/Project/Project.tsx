@@ -2,8 +2,11 @@ import React, { FC } from 'react';
 import styles from './Project.module.scss';
 import { ArrowIcon, DeleteIcon, EditIcon } from 'src/assets/icons';
 import Button from '../Button/Button';
-import { ButtonType } from 'src/utils/@globalTypes';
+import { ButtonType, ModalWindowType } from 'src/utils/@globalTypes';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setModalWindowType } from 'src/redux/actions/pageActions';
+import { deleteSingleProject } from 'src/redux/actions/projectsActions';
 
 type ProjectProps = {
   id: number;
@@ -13,6 +16,14 @@ type ProjectProps = {
 };
 
 const Project: FC<ProjectProps> = ({ title, description, supervisor, id }) => {
+  const dispatch = useDispatch();
+
+  const onEditBtnClick = () => {
+    dispatch(setModalWindowType(ModalWindowType.CreateProject));
+  };
+  const onDeleteBtnClick = () => {
+    dispatch(deleteSingleProject({ data: id }));
+  };
   return (
     <div className={styles.wrapper}>
       <p className={styles.title}>{title}</p>
@@ -22,12 +33,12 @@ const Project: FC<ProjectProps> = ({ title, description, supervisor, id }) => {
         <Button
           title={<EditIcon />}
           type={ButtonType.SMALL}
-          onClick={() => {}}
+          onClick={onEditBtnClick}
         />
         <Button
           title={<DeleteIcon />}
           type={ButtonType.SMALL}
-          onClick={() => {}}
+          onClick={onDeleteBtnClick}
         />
         <Link to={`/${id}/tasks`} className={styles.arrow}>
           <ArrowIcon />

@@ -1,4 +1,5 @@
 import {
+  DeleteSingleProjectPayload,
   Project,
   ProjectList,
   ProjectPayload,
@@ -38,7 +39,7 @@ export const updateSingleProject = (payload: UpdateProjectPayload) => ({
   payload,
 });
 
-export const deleteSingleProject = (payload: Project) => ({
+export const deleteSingleProject = (payload: DeleteSingleProjectPayload) => ({
   type: ProjectsActionTypes.DELETE_SINGLE_PROJECT,
   payload,
 });

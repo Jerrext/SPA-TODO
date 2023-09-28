@@ -1,6 +1,6 @@
 export type PayloadWithCallback<Data> = {
   data: Data;
-  callback: () => void;
+  callback?: () => void;
 };
 
 export type PayloadWithId<Data> = {

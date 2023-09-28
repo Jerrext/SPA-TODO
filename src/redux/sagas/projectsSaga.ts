@@ -3,6 +3,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { getProjects, setProjects } from '../actions/projectsActions';
 import {
   CreateSingleProjectAction,
+  DeleteSingleProjectAction,
   Project,
   ProjectList,
   ProjectsActionTypes,
@@ -38,12 +39,34 @@ export function* createSingleProjectWorker(action: CreateSingleProjectAction) {
   }
 }
 
+export function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
+  const { data, callback } = action.payload;
+
+  try {
+    yield call(API.deleteSingleProjectRequest, data);
+
+    if (callback) {
+      callback();
+    } else {
+      yield put(getProjects());
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.warn(error.message);
+    }
+  }
+}
+
 export default function* projectsSaga() {
   yield all([
     takeLatest(ProjectsActionTypes.GET_PROJECTS, getProjectsWorker),
     takeLatest(
       ProjectsActionTypes.CREATE_SINGLE_PROJECT,
       createSingleProjectWorker,
+    ),
+    takeLatest(
+      ProjectsActionTypes.DELETE_SINGLE_PROJECT,
+      deleteSingleProjectWorker,
     ),
   ]);
 }
