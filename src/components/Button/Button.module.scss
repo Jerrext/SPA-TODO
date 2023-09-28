@@ -14,3 +14,7 @@
   background-color: $color-btn-secondary;
   color: #000;
 }
+
+.small {
+  @include buttonSmall();
+}

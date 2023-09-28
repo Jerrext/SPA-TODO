@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './Projects.module.scss';
 import PageHeader from '../PageContainer/PageHeader';
 import Project from 'src/components/Project/Project';
@@ -7,8 +7,8 @@ import { setModalWindowType } from 'src/redux/actions/pageActions';
 import { ModalWindowType } from 'src/utils/@globalTypes';
 import { getProjects } from 'src/redux/actions/projectsActions';
 import { useTypedSelector } from 'src/utils/hooks';
-import { Link } from 'react-router-dom';
 import Loader from 'src/components/Loader/Loader';
+import EmptyState from 'src/components/EmptyState/EmptyState';
 
 const Projects = () => {
   const dispatch = useDispatch();
@@ -37,18 +37,22 @@ const Projects = () => {
       <div className={styles.body}>
         {isLoader ? (
           <Loader />
-        ) : (
+        ) : projectsList.length > 0 ? (
           projectsList.map(({ title, description, id, supervisor }) => {
             return (
-              <Link key={id} to={`${id}/tasks`}>
-                <Project
-                  title={title}
-                  description={description}
-                  supervisor={supervisor}
-                />
-              </Link>
+              <Project
+                id={id}
+                title={title}
+                description={description}
+                supervisor={supervisor}
+              />
             );
           })
+        ) : (
+          <EmptyState
+            title="Список проектов пуст"
+            description="Создайте свой первый проект"
+          />
         )}
       </div>
     </PageHeader>

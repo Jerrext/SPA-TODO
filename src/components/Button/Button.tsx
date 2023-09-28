@@ -1,20 +1,21 @@
-import React, { FC, ReactNode } from 'react'
-import classNames from 'classnames'
-import styles from './Button.module.scss'
-import { ButtonType } from 'src/utils/@globalTypes'
+import React, { FC, ReactNode } from 'react';
+import classNames from 'classnames';
+import styles from './Button.module.scss';
+import { ButtonType } from 'src/utils/@globalTypes';
 
 type ButtonProps = {
-  title: string | ReactNode
-  disabled?: boolean
-  type: ButtonType
-  className?: string
-  onClick: any
-}
+  title: string | ReactNode;
+  disabled?: boolean;
+  type: ButtonType;
+  className?: string;
+  onClick: any;
+};
 
 const btnStyles = {
   [ButtonType.PRIMARY]: styles.primaryBtn,
   [ButtonType.SECONDARY]: styles.secondaryBtn,
-}
+  [ButtonType.SMALL]: styles.small,
+};
 
 const Button: FC<ButtonProps> = ({
   title,
@@ -23,7 +24,7 @@ const Button: FC<ButtonProps> = ({
   disabled,
   className,
 }) => {
-  const btnClassName = btnStyles[type]
+  const btnClassName = btnStyles[type];
 
   return (
     <div className={styles.wrapper}>
@@ -35,7 +36,7 @@ const Button: FC<ButtonProps> = ({
         {title}
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

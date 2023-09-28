@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const ArrowIcon = ({
   width = '20',
@@ -17,5 +17,5 @@ export const ArrowIcon = ({
         fill={fill}
       />
     </svg>
-  )
-}
+  );
+};
