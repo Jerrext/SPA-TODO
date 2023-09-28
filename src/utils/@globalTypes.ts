@@ -7,3 +7,11 @@ export enum ButtonType {
 export enum ModalWindowType {
   CreateProject,
 }
+
+export enum InputType {
+  TEXT = 'text',
+  EMAIL = 'email',
+  TELEPHONE = 'tel',
+  PASSWORD = 'password',
+  TEXTAREA = 'textarea',
+}

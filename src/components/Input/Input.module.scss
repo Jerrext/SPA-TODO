@@ -1,0 +1,74 @@
+@import 'src/assets/mixins';
+
+.wrapper {
+  width: 100%;
+}
+
+.title {
+  @include h4();
+  margin-bottom: 10px;
+}
+
+.required::after {
+  content: '*';
+  color: $color-error;
+  margin-left: 5px;
+}
+
+.input {
+  outline: none;
+  border-radius: $radius;
+  background-color: $color-project;
+  width: 100%;
+  border: 1px solid transparent;
+  position: relative;
+  transition: $transition;
+  height: 50px;
+  padding: 0 20px;
+  @include h5($color-text-white);
+
+  &:focus {
+    background-color: $color-project-hover;
+    border: 1px solid $color-primary;
+    box-shadow: 0 0 20px -8px $color-primary;
+  }
+
+  &::placeholder {
+    @include h5();
+  }
+}
+
+.textarea {
+  padding: 20px;
+  resize: none;
+  height: 150px;
+}
+
+.activeInp {
+  border: 1px solid $color-primary;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.errorInput {
+  border: 1px solid $color-error;
+
+  &:focus {
+    border: 1px solid $color-error;
+    box-shadow: 0 0 20px -8px $color-error;
+  }
+}
+
+.errorText {
+  @include h5($color-error);
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  // margin-top: 5px;
+}
+
+.disabledInp {
+  cursor: not-allowed;
+}

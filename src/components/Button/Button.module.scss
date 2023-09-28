@@ -5,13 +5,13 @@
 }
 
 .primaryBtn {
-  @include button($color-btn-primary);
-  background-color: $color-btn-primary;
+  @include button($color-primary);
+  background-color: $color-primary;
 }
 
 .secondaryBtn {
-  @include button($color-btn-secondary);
-  background-color: $color-btn-secondary;
+  @include button($color-secondary);
+  background-color: $color-secondary;
   color: #000;
 }
 

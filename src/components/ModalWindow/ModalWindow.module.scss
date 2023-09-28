@@ -26,7 +26,7 @@
 .window {
   background-color: $color-bg;
   border-radius: $radius;
-  padding: 30px 50px;
+  padding: 50px;
   position: relative;
   transition: $transition;
   transform: translateY(40px);
@@ -37,7 +37,7 @@
 }
 
 .title {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .btnWrapper {
