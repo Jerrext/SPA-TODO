@@ -1,11 +1,11 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import PageContainer from './PageContainer/PageContainer'
-import Projects from './Projects/Projects'
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import PageContainer from './PageContainer/PageContainer';
+import Projects from './Projects/Projects';
 
 export enum RoutesList {
   Home = '/',
-  Tasks = '/tasks',
+  Tasks = '/:id/tasks',
   Default = '*',
 }
 
@@ -16,10 +16,11 @@ const Router = () => {
         <Route path={RoutesList.Home} element={<PageContainer />}>
           <Route index element={<Projects />} />
           <Route path={RoutesList.Tasks} element={<div></div>} />
+          <Route path={RoutesList.Default} element={<div>404</div>} />
         </Route>
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default Router
+export default Router;

@@ -10,11 +10,11 @@ const initialState: ModalWindowState = {
 
 export const modalWindowReducer = (
   state = initialState,
-  action: ModalWindowAction,
+  { type, payload }: ModalWindowAction,
 ): ModalWindowState => {
-  switch (action.type) {
+  switch (type) {
     case ModalWindowActionTypes.SET_MODAL_WINDOW_TYPE:
-      return { modalWindowType: action.payload };
+      return { modalWindowType: payload };
     default:
       return state;
   }

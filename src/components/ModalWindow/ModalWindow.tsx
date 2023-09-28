@@ -3,9 +3,8 @@ import styles from './ModalWindow.module.scss';
 import Button from '../Button';
 import { ButtonType } from 'src/utils/@globalTypes';
 import classNames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setModalWindowType } from 'src/redux/actions/modalWindowActions';
-import { useTypedSelector } from 'src/utils/hooks';
 
 type ModalWindowProps = {
   title: string;
