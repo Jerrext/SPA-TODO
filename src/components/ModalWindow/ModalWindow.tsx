@@ -11,6 +11,7 @@ type ModalWindowProps = {
   children: ReactNode;
   btnTitle: string;
   onSubmit: () => void;
+  isValid: boolean;
 };
 
 const ModalWindow: FC<ModalWindowProps> = ({
@@ -18,6 +19,7 @@ const ModalWindow: FC<ModalWindowProps> = ({
   children,
   btnTitle,
   onSubmit,
+  isValid,
 }) => {
   const dispatch = useDispatch();
 
@@ -56,6 +58,7 @@ const ModalWindow: FC<ModalWindowProps> = ({
             title={btnTitle}
             type={ButtonType.PRIMARY}
             onClick={onSubmit}
+            disabled={!isValid}
           />
           <Button
             title="Отмена"

@@ -18,3 +18,13 @@
 .small {
   @include buttonSmall();
 }
+
+.disabledBtn {
+  background-color: $color-disabled;
+  cursor: not-allowed;
+  box-shadow: none;
+
+  &:hover {
+    box-shadow: none;
+  }
+}

@@ -1,15 +1,18 @@
 import {
   Project,
   ProjectList,
+  ProjectPayload,
   ProjectsActionTypes,
-  UpdateProject,
+  UpdateProjectPayload,
 } from '../types/projectsTypes';
 
 export const getProjects = () => ({
+  //
   type: ProjectsActionTypes.GET_PROJECTS,
 });
 
 export const setProjects = (payload: ProjectList) => ({
+  //
   type: ProjectsActionTypes.SET_PROJECTS,
   payload,
 });
@@ -19,17 +22,23 @@ export const getSingleProject = (payload: number) => ({
   payload,
 });
 
-export const setSingleProject = (payload: Project) => ({
-  type: ProjectsActionTypes.SET_SINGLE_PROJECT,
+export const setCurrentProject = (payload: Project) => ({
+  type: ProjectsActionTypes.SET_CURRENT_PROJECT,
   payload,
 });
 
-export const updateSingleProject = (payload: UpdateProject) => ({
+export const createSingleProject = (payload: ProjectPayload) => ({
+  //
+  type: ProjectsActionTypes.CREATE_SINGLE_PROJECT,
+  payload,
+});
+
+export const updateSingleProject = (payload: UpdateProjectPayload) => ({
   type: ProjectsActionTypes.UPDATE_SINGLE_PROJECT,
   payload,
 });
 
 export const deleteSingleProject = (payload: Project) => ({
-  type: ProjectsActionTypes.SET_SINGLE_PROJECT,
+  type: ProjectsActionTypes.DELETE_SINGLE_PROJECT,
   payload,
 });

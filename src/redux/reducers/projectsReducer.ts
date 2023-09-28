@@ -16,7 +16,7 @@ export const ProjectsReducer = (
   switch (type) {
     case ProjectsActionTypes.SET_PROJECTS:
       return { ...state, projectsList: payload };
-    case ProjectsActionTypes.SET_SINGLE_PROJECT:
+    case ProjectsActionTypes.SET_CURRENT_PROJECT:
       return { ...state, currentProject: payload };
     default:
       return state;
