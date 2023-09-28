@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 
 export function* getProjectsWorker() {
   try {
-    const { data }: AxiosResponse<ProjectList> = yield call(
+    const { data, config }: AxiosResponse<ProjectList> = yield call(
       API.getProjectsRequest,
     );
     yield put(setProjects(data));
