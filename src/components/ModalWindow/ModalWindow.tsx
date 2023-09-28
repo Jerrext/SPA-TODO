@@ -1,14 +1,18 @@
-import React, { FC, ReactNode } from 'react'
-import styles from './ModalWindow.module.scss'
-import Button from '../Button'
-import { ButtonType } from 'src/utils/@globalTypes'
+import React, { FC, ReactNode, useEffect, useState } from 'react';
+import styles from './ModalWindow.module.scss';
+import Button from '../Button';
+import { ButtonType } from 'src/utils/@globalTypes';
+import classNames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
+import { setModalWindowType } from 'src/redux/actions/modalWindowActions';
+import { useTypedSelector } from 'src/utils/hooks';
 
 type ModalWindowProps = {
-  title: string
-  children: ReactNode
-  btnTitle: string
-  onSubmit: () => void
-}
+  title: string;
+  children: ReactNode;
+  btnTitle: string;
+  onSubmit: () => void;
+};
 
 const ModalWindow: FC<ModalWindowProps> = ({
   title,
@@ -16,11 +20,36 @@ const ModalWindow: FC<ModalWindowProps> = ({
   btnTitle,
   onSubmit,
 }) => {
-  const onCancelBtnClick = () => {}
+  const dispatch = useDispatch();
+
+  const [visibility, setVisibility] = useState(false);
+
+  const onCancelBtnClick = () => {
+    dispatch(setModalWindowType(null));
+  };
+
+  // const submitHandler = () => {
+  //   onCancelBtnClick();
+  // };
+
+  useEffect(() => {
+    setVisibility(true);
+    return () => {
+      setVisibility(false);
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
-      <div className={styles.overlay} onClick={onCancelBtnClick}></div>
-      <div className={styles.window}>
+      <div
+        className={classNames(styles.overlay, {
+          [styles.showOverlay]: visibility,
+        })}
+        onClick={onCancelBtnClick}></div>
+      <div
+        className={classNames(styles.window, {
+          [styles.showWindow]: visibility,
+        })}>
         <h2 className={styles.title}>{title}</h2>
         {children}
         <div className={styles.btnWrapper}>
@@ -37,7 +66,7 @@ const ModalWindow: FC<ModalWindowProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ModalWindow
+export default ModalWindow;

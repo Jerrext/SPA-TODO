@@ -1,10 +1,17 @@
-import React from 'react'
-import styles from './Projects.module.scss'
-import PageHeader from '../PageContainer/PageHeader'
-import Project from 'src/components/Project/Project'
+import React from 'react';
+import styles from './Projects.module.scss';
+import PageHeader from '../PageContainer/PageHeader';
+import Project from 'src/components/Project/Project';
+import { useDispatch } from 'react-redux';
+import { setModalWindowType } from 'src/redux/actions/modalWindowActions';
+import { ModalWindowType } from 'src/utils/@globalTypes';
 
 const Projects = () => {
-  const onNewProjectBtnClick = () => {}
+  const dispatch = useDispatch();
+
+  const onNewProjectBtnClick = () => {
+    dispatch(setModalWindowType(ModalWindowType.CreateProject));
+  };
 
   return (
     <PageHeader
@@ -39,7 +46,7 @@ const Projects = () => {
         />
       </div>
     </PageHeader>
-  )
-}
+  );
+};
 
-export default Projects
+export default Projects;
