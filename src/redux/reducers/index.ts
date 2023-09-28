@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { modalWindowReducer } from './modalWindowReducer';
+import { pageReducer } from './pageReducer';
 import { ProjectsReducer } from './projectsReducer';
 
 export const rootReducer = combineReducers({
-  modalWindow: modalWindowReducer,
+  page: pageReducer,
   projects: ProjectsReducer,
 });
 

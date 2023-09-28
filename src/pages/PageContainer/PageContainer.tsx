@@ -7,7 +7,7 @@ import { useTypedSelector } from 'src/utils/hooks';
 
 const PageContainer = () => {
   const modalWindowType = useTypedSelector(
-    (state) => state.modalWindow.modalWindowType,
+    (state) => state.page.modalWindowType,
   );
 
   const getCurrentWindow = () => {

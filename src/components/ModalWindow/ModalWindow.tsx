@@ -4,7 +4,7 @@ import Button from '../Button';
 import { ButtonType } from 'src/utils/@globalTypes';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import { setModalWindowType } from 'src/redux/actions/modalWindowActions';
+import { setModalWindowType } from 'src/redux/actions/pageActions';
 
 type ModalWindowProps = {
   title: string;
