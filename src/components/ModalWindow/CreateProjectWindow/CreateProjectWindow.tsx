@@ -11,15 +11,16 @@ import {
   updateSingleProject,
 } from 'src/redux/actions/projectsActions';
 import { Project } from 'src/redux/types/projectsTypes';
+import { PageTypes } from 'src/redux/types/pageTypes';
 
 type CreateProjectWindowProps = {
   currentProject: Project | null;
-  modalWindowType: ModalWindowType;
+  currentPage?: PageTypes | null;
 };
 
 const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
   currentProject,
-  modalWindowType,
+  currentPage,
 }) => {
   const dispatch = useDispatch();
 
@@ -38,22 +39,18 @@ const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
   };
 
   const onSaveBtnClick = () => {
-    currentProject &&
+    if (currentProject && currentPage) {
       dispatch(
         updateSingleProject({
           id: currentProject.id,
-          data: { title, description, supervisor },
+          data: {
+            page: currentPage,
+            project: { title, description, supervisor },
+          },
         }),
       );
+    }
   };
-
-  useEffect(() => {
-    return () => {
-      if (modalWindowType === ModalWindowType.EditProject) {
-        dispatch(setCurrentProject(null));
-      }
-    };
-  }, [modalWindowType]);
 
   useEffect(() => {
     if (currentProject) {

@@ -1,5 +1,7 @@
 import { ModalWindowType } from 'src/utils/@globalTypes';
 import { PayloadWithCallback, PayloadWithId } from './@types';
+import { RoutesList } from 'src/pages/Router';
+import { PageTypes } from './pageTypes';
 
 export enum ProjectsActionTypes {
   SET_PROJECTS = 'SET_PROJECTS',
@@ -32,7 +34,10 @@ export type DeleteSingleProjectPayload = PayloadWithCallback<number>;
 
 export type GetSingleProjectPayload = PayloadWithId<{ isPage: boolean }>;
 
-export type UpdateProjectPayload = PayloadWithId<ProjectPayload>;
+export type UpdateProjectPayload = PayloadWithId<{
+  page: PageTypes;
+  project: ProjectPayload;
+}>;
 
 //
 

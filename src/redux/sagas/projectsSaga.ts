@@ -2,6 +2,7 @@ import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import {
   getProjects,
+  getSingleProject,
   setCurrentProject,
   setProjects,
 } from '../actions/projectsActions';
@@ -22,6 +23,8 @@ import {
   setModalWindowType,
 } from '../actions/pageActions';
 import { ModalWindowType } from 'src/utils/@globalTypes';
+import { RoutesList } from 'src/pages/Router';
+import { PageTypes } from '../types/pageTypes';
 
 export function* getProjectsWorker() {
   try {
@@ -91,12 +94,24 @@ export function* getSingleProjectWorker(action: GetSingleProjectAction) {
 }
 
 export function* updateSingleProjectWorker(action: UpdateSingleProjectAction) {
-  const { data, id } = action.payload;
+  const {
+    data: { project, page },
+    id,
+  } = action.payload;
 
   try {
-    yield call(API.updateSingleProjectRequest, id, data);
+    yield call(API.updateSingleProjectRequest, id, project);
     yield put(setModalWindowType(null));
-    yield put(getProjects());
+    switch (page) {
+      case PageTypes.Projects:
+        yield put(getProjects());
+        break;
+      case PageTypes.Tasks:
+        yield put(getSingleProject({ id, data: { isPage: true } }));
+        break;
+      default:
+        break;
+    }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);

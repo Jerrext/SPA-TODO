@@ -12,21 +12,17 @@ const PageContainer = () => {
   const currentProject = useTypedSelector(
     (state) => state.projects.currentProject,
   );
+  const currentPage = useTypedSelector((state) => state.page.currentPage);
 
   const getCurrentWindow = () => {
     switch (modalWindowType) {
       case ModalWindowType.CreateProject:
-        return (
-          <CreateProjectWindow
-            currentProject={null}
-            modalWindowType={ModalWindowType.CreateProject}
-          />
-        );
+        return <CreateProjectWindow currentProject={null} />;
       case ModalWindowType.EditProject:
         return (
           <CreateProjectWindow
             currentProject={currentProject}
-            modalWindowType={ModalWindowType.EditProject}
+            currentPage={currentPage}
           />
         );
       default:

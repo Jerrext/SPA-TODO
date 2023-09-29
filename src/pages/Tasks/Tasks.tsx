@@ -11,8 +11,13 @@ import {
 } from 'src/redux/actions/projectsActions';
 import Button from 'src/components/Button/Button';
 import { DeleteIcon, EditIcon } from 'src/assets/icons';
-import { ButtonType } from 'src/utils/@globalTypes';
+import { ButtonType, ModalWindowType } from 'src/utils/@globalTypes';
 import { RoutesList } from '../Router';
+import {
+  setCurrentPage,
+  setModalWindowType,
+} from 'src/redux/actions/pageActions';
+import { PageTypes } from 'src/redux/types/pageTypes';
 
 const Tasks = () => {
   const dispatch = useDispatch();
@@ -25,7 +30,9 @@ const Tasks = () => {
 
   const onNewTaskBtnClick = () => {};
 
-  const onEditBtnClick = () => {};
+  const onEditBtnClick = () => {
+    dispatch(setModalWindowType(ModalWindowType.EditProject));
+  };
 
   const onDeleteBtnClick = () => {
     currentProject &&
@@ -44,6 +51,7 @@ const Tasks = () => {
   }, [id]);
 
   useEffect(() => {
+    dispatch(setCurrentPage(PageTypes.Tasks));
     return () => {
       dispatch(setCurrentProject(null));
     };

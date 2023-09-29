@@ -1,5 +1,10 @@
 import { ModalWindowType } from 'src/utils/@globalTypes';
-import { PageActionTypes } from '../types/pageTypes';
+import { PageActionTypes, PageTypes } from '../types/pageTypes';
+
+export const setCurrentPage = (payload: PageTypes) => ({
+  type: PageActionTypes.SET_CURRENT_PAGE,
+  payload,
+});
 
 export const setModalWindowType = (payload: ModalWindowType | null) => ({
   type: PageActionTypes.SET_MODAL_WINDOW_TYPE,
