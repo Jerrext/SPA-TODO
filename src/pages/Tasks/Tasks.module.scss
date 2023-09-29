@@ -31,3 +31,49 @@
   gap: 10px;
   align-items: center;
 }
+
+.board {
+  display: flex;
+  background-color: $color-project;
+  border-radius: $radius;
+  gap: 40px;
+  padding: 40px;
+  margin-top: 30px;
+
+  p {
+    @include h3();
+    text-align: center;
+  }
+}
+
+.boardItem {
+  flex: 1;
+}
+
+.card {
+  background-color: $color-bg;
+  border-radius: $radius;
+  padding: 10px;
+  margin-top: 15px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchWrapper {
+  display: flex;
+  margin-top: 30px;
+  align-items: end;
+}
+
+.searchBtn {
+  align-self: end;
+  border: 1px solid transparent;
+  border-radius: 0 $radius $radius 0;
+  padding: 0 20px;
+  box-shadow: none;
+}
+
+.searchInput {
+  border-radius: $radius 0 0 $radius;
+}

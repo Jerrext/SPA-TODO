@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
 import styles from './Project.module.scss';
 import { ArrowIcon, DeleteIcon, EditIcon } from 'src/assets/icons';
-import Button from '../Button/Button';
+import Button from '../Button';
 import { ButtonType, ModalWindowType } from 'src/utils/@globalTypes';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setModalWindowType } from 'src/redux/actions/pageActions';
 import {
   deleteSingleProject,
-  getSingleProject,
+  setCurrentProject,
 } from 'src/redux/actions/projectsActions';
 
 type ProjectProps = {
@@ -23,7 +23,7 @@ const Project: FC<ProjectProps> = ({ title, description, supervisor, id }) => {
 
   const onEditBtnClick = () => {
     dispatch(setModalWindowType(ModalWindowType.EditProject));
-    dispatch(getSingleProject({ id, data: { isPage: false } }));
+    dispatch(setCurrentProject({ id, title, description, supervisor }));
   };
   const onDeleteBtnClick = () => {
     dispatch(deleteSingleProject({ data: id }));

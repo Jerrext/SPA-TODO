@@ -2,25 +2,21 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import styles from './CreateProjectWindow.module.scss';
 import ModalWindow from '../ModalWindow';
 import Input from 'src/components/Input';
-import { InputType, ModalWindowType } from 'src/utils/@globalTypes';
+import { InputType } from 'src/utils/@globalTypes';
 import { setFieldRequiredErrorText } from 'src/utils/helpers';
 import { useDispatch } from 'react-redux';
 import {
   createSingleProject,
-  setCurrentProject,
   updateSingleProject,
 } from 'src/redux/actions/projectsActions';
 import { Project } from 'src/redux/types/projectsTypes';
-import { PageTypes } from 'src/redux/types/pageTypes';
 
 type CreateProjectWindowProps = {
   currentProject: Project | null;
-  currentPage?: PageTypes | null;
 };
 
 const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
   currentProject,
-  currentPage,
 }) => {
   const dispatch = useDispatch();
 
@@ -39,14 +35,11 @@ const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
   };
 
   const onSaveBtnClick = () => {
-    if (currentProject && currentPage) {
+    if (currentProject) {
       dispatch(
         updateSingleProject({
           id: currentProject.id,
-          data: {
-            page: currentPage,
-            project: { title, description, supervisor },
-          },
+          data: { title, description, supervisor },
         }),
       );
     }

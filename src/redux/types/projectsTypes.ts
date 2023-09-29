@@ -1,11 +1,11 @@
-import { ModalWindowType } from 'src/utils/@globalTypes';
 import { PayloadWithCallback, PayloadWithId } from './@types';
-import { RoutesList } from 'src/pages/Router';
-import { PageTypes } from './pageTypes';
 
 export enum ProjectsActionTypes {
-  SET_PROJECTS = 'SET_PROJECTS',
-  GET_PROJECTS = 'GET_PROJECTS',
+  SET_PROJECTS_LIST = 'SET_PROJECTS_LIST',
+  GET_PROJECTS_LIST = 'GET_PROJECTS_LIST',
+  UPDATE_PROJECTS_LIST = 'UPDATE_PROJECTS_LIST',
+  ADD_PROJECT_IN_LIST = 'ADD_PROJECT_IN_LIST',
+  REMOVE_PROJECT_FROM_LIST = 'REMOVE_PROJECT_FROM_LIST',
   GET_SINGLE_PROJECT = 'GET_SINGLE_PROJECT',
   CREATE_SINGLE_PROJECT = 'CREATE_SINGLE_PROJECT',
   UPDATE_SINGLE_PROJECT = 'UPDATE_SINGLE_PROJECT',
@@ -32,12 +32,7 @@ export type ProjectPayload = {
 
 export type DeleteSingleProjectPayload = PayloadWithCallback<number>;
 
-export type GetSingleProjectPayload = PayloadWithId<{ isPage: boolean }>;
-
-export type UpdateProjectPayload = PayloadWithId<{
-  page: PageTypes;
-  project: ProjectPayload;
-}>;
+export type UpdateProjectPayload = PayloadWithId<ProjectPayload>;
 
 //
 
@@ -48,8 +43,23 @@ export type ProjectsState = {
 
 //
 
-type SetProjectsAction = {
-  type: ProjectsActionTypes.SET_PROJECTS;
+export type UpdateProjectsListAction = {
+  type: ProjectsActionTypes.UPDATE_PROJECTS_LIST;
+  payload: Project;
+};
+
+export type AddProjectsInListAction = {
+  type: ProjectsActionTypes.ADD_PROJECT_IN_LIST;
+  payload: Project;
+};
+
+export type RemoveProjectsFromListAction = {
+  type: ProjectsActionTypes.REMOVE_PROJECT_FROM_LIST;
+  payload: number;
+};
+
+export type SetProjectsListAction = {
+  type: ProjectsActionTypes.SET_PROJECTS_LIST;
   payload: ProjectList;
 };
 
@@ -70,10 +80,10 @@ export type UpdateSingleProjectAction = {
 
 export type GetSingleProjectAction = {
   type: ProjectsActionTypes.GET_SINGLE_PROJECT;
-  payload: GetSingleProjectPayload;
+  payload: number;
 };
 
-type SetCurrentProjectAction = {
+export type SetCurrentProjectAction = {
   type: ProjectsActionTypes.SET_CURRENT_PROJECT;
   payload: Project | null;
 };
@@ -81,7 +91,10 @@ type SetCurrentProjectAction = {
 //
 
 export type ProjectsAction =
-  | SetProjectsAction
+  | AddProjectsInListAction
+  | RemoveProjectsFromListAction
+  | UpdateProjectsListAction
+  | SetProjectsListAction
   | SetCurrentProjectAction
   | CreateSingleProjectAction
   | UpdateSingleProjectAction;

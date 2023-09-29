@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import {
-  getProjects,
-  getSingleProject,
+  addProjectInList,
+  removeProjectFromList,
   setCurrentProject,
-  setProjects,
+  setProjectsList,
+  updateProjectsList,
 } from '../actions/projectsActions';
 import {
   CreateSingleProjectAction,
@@ -17,14 +18,7 @@ import {
 } from '../types/projectsTypes';
 import API from '../api';
 import { AxiosResponse } from 'axios';
-import {
-  setIsPageLoader,
-  setIsWindowLoader,
-  setModalWindowType,
-} from '../actions/pageActions';
-import { ModalWindowType } from 'src/utils/@globalTypes';
-import { RoutesList } from 'src/pages/Router';
-import { PageTypes } from '../types/pageTypes';
+import { setIsPageLoader, setModalWindowType } from '../actions/pageActions';
 
 export function* getProjectsWorker() {
   try {
@@ -32,7 +26,7 @@ export function* getProjectsWorker() {
     const { data }: AxiosResponse<ProjectList> = yield call(
       API.getProjectsRequest,
     );
-    yield put(setProjects(data));
+    yield put(setProjectsList(data));
     yield put(setIsPageLoader(false));
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -43,9 +37,12 @@ export function* getProjectsWorker() {
 
 export function* createSingleProjectWorker(action: CreateSingleProjectAction) {
   try {
-    yield call(API.createSingleProjectRequest, action.payload);
+    const { data }: AxiosResponse<Project> = yield call(
+      API.createSingleProjectRequest,
+      action.payload,
+    );
     yield put(setModalWindowType(null));
-    yield put(getProjects());
+    yield put(addProjectInList(data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);
@@ -62,7 +59,7 @@ export function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
     if (callback) {
       callback();
     } else {
-      yield put(getProjects());
+      yield put(removeProjectFromList(data));
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -72,20 +69,14 @@ export function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
 }
 
 export function* getSingleProjectWorker(action: GetSingleProjectAction) {
-  const {
-    id,
-    data: { isPage },
-  } = action.payload;
-  const setLoader = isPage ? setIsPageLoader : setIsWindowLoader;
-
   try {
-    yield put(setLoader(true));
-    const { data: responseData }: AxiosResponse<Project> = yield call(
+    yield put(setIsPageLoader(true));
+    const { data }: AxiosResponse<Project> = yield call(
       API.getSingleProjectRequest,
-      id,
+      action.payload,
     );
-    yield put(setCurrentProject(responseData));
-    yield put(setLoader(false));
+    yield put(setCurrentProject(data));
+    yield put(setIsPageLoader(false));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);
@@ -94,24 +85,17 @@ export function* getSingleProjectWorker(action: GetSingleProjectAction) {
 }
 
 export function* updateSingleProjectWorker(action: UpdateSingleProjectAction) {
-  const {
-    data: { project, page },
-    id,
-  } = action.payload;
+  const { data, id } = action.payload;
 
   try {
-    yield call(API.updateSingleProjectRequest, id, project);
+    const { data: responseData } = yield call(
+      API.updateSingleProjectRequest,
+      id,
+      data,
+    );
     yield put(setModalWindowType(null));
-    switch (page) {
-      case PageTypes.Projects:
-        yield put(getProjects());
-        break;
-      case PageTypes.Tasks:
-        yield put(getSingleProject({ id, data: { isPage: true } }));
-        break;
-      default:
-        break;
-    }
+    yield put(updateProjectsList(responseData));
+    yield put(setCurrentProject(responseData));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);
@@ -121,7 +105,7 @@ export function* updateSingleProjectWorker(action: UpdateSingleProjectAction) {
 
 export default function* projectsSaga() {
   yield all([
-    takeLatest(ProjectsActionTypes.GET_PROJECTS, getProjectsWorker),
+    takeLatest(ProjectsActionTypes.GET_PROJECTS_LIST, getProjectsWorker),
     takeLatest(
       ProjectsActionTypes.CREATE_SINGLE_PROJECT,
       createSingleProjectWorker,

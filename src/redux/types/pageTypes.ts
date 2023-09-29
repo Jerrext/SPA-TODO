@@ -7,22 +7,10 @@ export enum PageActionTypes {
   SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
 }
 
-export enum PageTypes {
-  Projects = 'Projects',
-  Tasks = 'Tasks',
-  NotFound = 'NotFound',
-}
-
 export type PageState = {
   modalWindowType: ModalWindowType | null;
   isPageLoader: boolean;
   isWindowLoader: boolean;
-  currentPage: PageTypes | null;
-};
-
-type CurrentPageAction = {
-  type: PageActionTypes.SET_CURRENT_PAGE;
-  payload: PageTypes;
 };
 
 type ModalWindowAction = {
@@ -43,5 +31,4 @@ type IsWindowLoaderAction = {
 export type PageAction =
   | ModalWindowAction
   | IsProjectsLoaderAction
-  | IsWindowLoaderAction
-  | CurrentPageAction;
+  | IsWindowLoaderAction;

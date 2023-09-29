@@ -3,3 +3,4 @@ export { DeleteIcon } from './DeleteIcon';
 export { EditIcon } from './EditIcon';
 export { NoContentIcon } from './NoContentIcon';
 export { HomeIcon } from './HomeIcon';
+export { SearchIcon } from './SearchIcon';
