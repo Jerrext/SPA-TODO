@@ -3,14 +3,20 @@ import styles from './Tasks.module.scss';
 import PageHeader from '../PageContainer/PageHeader';
 import { useTypedSelector } from 'src/utils/hooks';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { getSingleProject } from 'src/redux/actions/projectsActions';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  deleteSingleProject,
+  getSingleProject,
+  setCurrentProject,
+} from 'src/redux/actions/projectsActions';
 import Button from 'src/components/Button/Button';
 import { DeleteIcon, EditIcon } from 'src/assets/icons';
 import { ButtonType } from 'src/utils/@globalTypes';
+import { RoutesList } from '../Router';
 
 const Tasks = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const currentProject = useTypedSelector(
@@ -21,11 +27,27 @@ const Tasks = () => {
 
   const onEditBtnClick = () => {};
 
-  const onDeleteBtnClick = () => {};
+  const onDeleteBtnClick = () => {
+    currentProject &&
+      dispatch(
+        deleteSingleProject({
+          data: currentProject.id,
+          callback: () => {
+            navigate(RoutesList.Home);
+          },
+        }),
+      );
+  };
 
   useEffect(() => {
     id && dispatch(getSingleProject({ id: +id, data: { isPage: true } }));
   }, [id]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setCurrentProject(null));
+    };
+  }, []);
 
   return (
     <PageHeader
