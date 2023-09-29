@@ -2,7 +2,7 @@ import { PageAction, PageActionTypes, PageState } from '../types/pageTypes';
 
 const initialState: PageState = {
   modalWindowType: null,
-  isProjectsLoader: false,
+  isPageLoader: false,
   isWindowLoader: false,
 };
 
@@ -13,8 +13,8 @@ export const pageReducer = (
   switch (type) {
     case PageActionTypes.SET_MODAL_WINDOW_TYPE:
       return { ...state, modalWindowType: payload };
-    case PageActionTypes.SET_IS_PROJECTS_LOADER:
-      return { ...state, isProjectsLoader: payload };
+    case PageActionTypes.SET_IS_PAGE_LOADER:
+      return { ...state, isPageLoader: payload };
     case PageActionTypes.SET_IS_WINDOW_LOADER:
       return { ...state, isWindowLoader: payload };
     default:

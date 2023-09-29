@@ -1,0 +1,33 @@
+@import 'src/assets/mixins';
+
+.projectsInfo {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+
+  div {
+    p:first-child {
+      @include h5();
+      margin-bottom: 5px;
+    }
+
+    p:last-child {
+      @include h4();
+    }
+  }
+}
+
+.description {
+  flex: 1;
+}
+
+.supervisor,
+.title {
+  min-width: 200px;
+}
+
+.btnsWrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

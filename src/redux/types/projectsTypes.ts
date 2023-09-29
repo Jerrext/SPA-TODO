@@ -1,3 +1,4 @@
+import { ModalWindowType } from 'src/utils/@globalTypes';
 import { PayloadWithCallback, PayloadWithId } from './@types';
 
 export enum ProjectsActionTypes {
@@ -28,6 +29,8 @@ export type ProjectPayload = {
 };
 
 export type DeleteSingleProjectPayload = PayloadWithCallback<number>;
+
+export type GetSingleProjectPayload = PayloadWithId<{ isPage: boolean }>;
 
 export type UpdateProjectPayload = PayloadWithId<ProjectPayload>;
 
@@ -62,7 +65,7 @@ export type UpdateSingleProjectAction = {
 
 export type GetSingleProjectAction = {
   type: ProjectsActionTypes.GET_SINGLE_PROJECT;
-  payload: number;
+  payload: GetSingleProjectPayload;
 };
 
 type SetCurrentProjectAction = {

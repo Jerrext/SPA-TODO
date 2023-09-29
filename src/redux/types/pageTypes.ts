@@ -2,13 +2,13 @@ import { ModalWindowType } from 'src/utils/@globalTypes';
 
 export enum PageActionTypes {
   SET_MODAL_WINDOW_TYPE = 'SET_MODAL_WINDOW_TYPE',
-  SET_IS_PROJECTS_LOADER = 'SET_IS_PROJECTS_LOADER',
+  SET_IS_PAGE_LOADER = 'SET_IS_PAGE_LOADER',
   SET_IS_WINDOW_LOADER = 'SET_IS_WINDOW_LOADER',
 }
 
 export type PageState = {
   modalWindowType: ModalWindowType | null;
-  isProjectsLoader: boolean;
+  isPageLoader: boolean;
   isWindowLoader: boolean;
 };
 
@@ -18,7 +18,7 @@ type ModalWindowAction = {
 };
 
 type IsProjectsLoaderAction = {
-  type: PageActionTypes.SET_IS_PROJECTS_LOADER;
+  type: PageActionTypes.SET_IS_PAGE_LOADER;
   payload: boolean;
 };
 

@@ -1,13 +1,12 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import styles from './CreateProjectWindow.module.scss';
 import ModalWindow from '../ModalWindow';
-import Input from 'src/components/Input/Input';
+import Input from 'src/components/Input';
 import { InputType, ModalWindowType } from 'src/utils/@globalTypes';
 import { setFieldRequiredErrorText } from 'src/utils/helpers';
 import { useDispatch } from 'react-redux';
 import {
   createSingleProject,
-  getSingleProject,
   setCurrentProject,
   updateSingleProject,
 } from 'src/redux/actions/projectsActions';

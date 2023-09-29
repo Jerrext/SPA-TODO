@@ -7,3 +7,14 @@
   gap: 50px;
   padding: 70px 0 30px;
 }
+
+.btnsWrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.backBtn {
+  @include button($color-secondary);
+  padding: 0 20px;
+  background-color: $color-secondary;
+}

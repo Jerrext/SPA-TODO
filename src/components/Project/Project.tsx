@@ -23,7 +23,7 @@ const Project: FC<ProjectProps> = ({ title, description, supervisor, id }) => {
 
   const onEditBtnClick = () => {
     dispatch(setModalWindowType(ModalWindowType.EditProject));
-    dispatch(getSingleProject(id));
+    dispatch(getSingleProject({ id, data: { isPage: false } }));
   };
   const onDeleteBtnClick = () => {
     dispatch(deleteSingleProject({ data: id }));

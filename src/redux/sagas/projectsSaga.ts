@@ -17,19 +17,20 @@ import {
 import API from '../api';
 import { AxiosResponse } from 'axios';
 import {
-  setIsProjectsLoader,
+  setIsPageLoader,
   setIsWindowLoader,
   setModalWindowType,
 } from '../actions/pageActions';
+import { ModalWindowType } from 'src/utils/@globalTypes';
 
 export function* getProjectsWorker() {
   try {
-    yield put(setIsProjectsLoader(true));
+    yield put(setIsPageLoader(true));
     const { data }: AxiosResponse<ProjectList> = yield call(
       API.getProjectsRequest,
     );
     yield put(setProjects(data));
-    yield put(setIsProjectsLoader(false));
+    yield put(setIsPageLoader(false));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);
@@ -68,14 +69,20 @@ export function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
 }
 
 export function* getSingleProjectWorker(action: GetSingleProjectAction) {
+  const {
+    id,
+    data: { isPage },
+  } = action.payload;
+  const setLoader = isPage ? setIsPageLoader : setIsWindowLoader;
+
   try {
-    yield put(setIsWindowLoader(true));
-    const { data }: AxiosResponse<Project> = yield call(
+    yield put(setLoader(true));
+    const { data: responseData }: AxiosResponse<Project> = yield call(
       API.getSingleProjectRequest,
-      action.payload,
+      id,
     );
-    yield put(setCurrentProject(data));
-    yield put(setIsWindowLoader(false));
+    yield put(setCurrentProject(responseData));
+    yield put(setLoader(false));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);

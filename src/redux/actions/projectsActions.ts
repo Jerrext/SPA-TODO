@@ -1,5 +1,6 @@
 import {
   DeleteSingleProjectPayload,
+  GetSingleProjectPayload,
   Project,
   ProjectList,
   ProjectPayload,
@@ -18,7 +19,7 @@ export const setProjects = (payload: ProjectList) => ({
   payload,
 });
 
-export const getSingleProject = (payload: number) => ({
+export const getSingleProject = (payload: GetSingleProjectPayload) => ({
   type: ProjectsActionTypes.GET_SINGLE_PROJECT,
   payload,
 });
