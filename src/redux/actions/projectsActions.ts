@@ -23,7 +23,7 @@ export const getSingleProject = (payload: number) => ({
   payload,
 });
 
-export const setCurrentProject = (payload: Project) => ({
+export const setCurrentProject = (payload: Project | null) => ({
   type: ProjectsActionTypes.SET_CURRENT_PROJECT,
   payload,
 });

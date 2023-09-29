@@ -1,25 +1,35 @@
 import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import { getProjects, setProjects } from '../actions/projectsActions';
+import {
+  getProjects,
+  setCurrentProject,
+  setProjects,
+} from '../actions/projectsActions';
 import {
   CreateSingleProjectAction,
   DeleteSingleProjectAction,
+  GetSingleProjectAction,
   Project,
   ProjectList,
   ProjectsActionTypes,
+  UpdateSingleProjectAction,
 } from '../types/projectsTypes';
 import API from '../api';
 import { AxiosResponse } from 'axios';
-import { setIsLoader, setModalWindowType } from '../actions/pageActions';
+import {
+  setIsProjectsLoader,
+  setIsWindowLoader,
+  setModalWindowType,
+} from '../actions/pageActions';
 
 export function* getProjectsWorker() {
   try {
-    yield put(setIsLoader(true));
+    yield put(setIsProjectsLoader(true));
     const { data }: AxiosResponse<ProjectList> = yield call(
       API.getProjectsRequest,
     );
     yield put(setProjects(data));
-    yield put(setIsLoader(false));
+    yield put(setIsProjectsLoader(false));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);
@@ -57,6 +67,36 @@ export function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
   }
 }
 
+export function* getSingleProjectWorker(action: GetSingleProjectAction) {
+  try {
+    yield put(setIsWindowLoader(true));
+    const { data }: AxiosResponse<Project> = yield call(
+      API.getSingleProjectRequest,
+      action.payload,
+    );
+    yield put(setCurrentProject(data));
+    yield put(setIsWindowLoader(false));
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.warn(error.message);
+    }
+  }
+}
+
+export function* updateSingleProjectWorker(action: UpdateSingleProjectAction) {
+  const { data, id } = action.payload;
+
+  try {
+    yield call(API.updateSingleProjectRequest, id, data);
+    yield put(setModalWindowType(null));
+    yield put(getProjects());
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.warn(error.message);
+    }
+  }
+}
+
 export default function* projectsSaga() {
   yield all([
     takeLatest(ProjectsActionTypes.GET_PROJECTS, getProjectsWorker),
@@ -67,6 +107,11 @@ export default function* projectsSaga() {
     takeLatest(
       ProjectsActionTypes.DELETE_SINGLE_PROJECT,
       deleteSingleProjectWorker,
+    ),
+    takeLatest(ProjectsActionTypes.GET_SINGLE_PROJECT, getSingleProjectWorker),
+    takeLatest(
+      ProjectsActionTypes.UPDATE_SINGLE_PROJECT,
+      updateSingleProjectWorker,
     ),
   ]);
 }

@@ -24,8 +24,18 @@ const deleteSingleProjectRequest = (id: number) => {
   return firstApiAxios.delete(`/projects/${id}`);
 };
 
+const getSingleProjectRequest = (id: number) => {
+  return firstApiAxios.get(`/projects/${id}`);
+};
+
+const updateSingleProjectRequest = (id: number, data: ProjectPayload) => {
+  return firstApiAxios.put(`/projects/${id}`, data);
+};
+
 export default {
   getProjectsRequest,
   createSingleProjectRequest,
   deleteSingleProjectRequest,
+  getSingleProjectRequest,
+  updateSingleProjectRequest,
 };

@@ -9,11 +9,26 @@ const PageContainer = () => {
   const modalWindowType = useTypedSelector(
     (state) => state.page.modalWindowType,
   );
+  const currentProject = useTypedSelector(
+    (state) => state.projects.currentProject,
+  );
 
   const getCurrentWindow = () => {
     switch (modalWindowType) {
       case ModalWindowType.CreateProject:
-        return <CreateProjectWindow />;
+        return (
+          <CreateProjectWindow
+            currentProject={null}
+            modalWindowType={ModalWindowType.CreateProject}
+          />
+        );
+      case ModalWindowType.EditProject:
+        return (
+          <CreateProjectWindow
+            currentProject={currentProject}
+            modalWindowType={ModalWindowType.EditProject}
+          />
+        );
       default:
         return;
     }

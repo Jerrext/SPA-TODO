@@ -6,6 +6,7 @@ export enum ButtonType {
 
 export enum ModalWindowType {
   CreateProject,
+  EditProject,
 }
 
 export enum InputType {

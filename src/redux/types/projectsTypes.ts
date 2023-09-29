@@ -27,7 +27,7 @@ export type ProjectPayload = {
   supervisor: string;
 };
 
-type DeleteSingleProjectPayload = PayloadWithCallback<number>;
+export type DeleteSingleProjectPayload = PayloadWithCallback<number>;
 
 export type UpdateProjectPayload = PayloadWithId<ProjectPayload>;
 
@@ -55,9 +55,19 @@ export type DeleteSingleProjectAction = {
   payload: DeleteSingleProjectPayload;
 };
 
+export type UpdateSingleProjectAction = {
+  type: ProjectsActionTypes.UPDATE_SINGLE_PROJECT;
+  payload: UpdateProjectPayload;
+};
+
+export type GetSingleProjectAction = {
+  type: ProjectsActionTypes.GET_SINGLE_PROJECT;
+  payload: number;
+};
+
 type SetCurrentProjectAction = {
   type: ProjectsActionTypes.SET_CURRENT_PROJECT;
-  payload: Project;
+  payload: Project | null;
 };
 
 //
@@ -65,4 +75,5 @@ type SetCurrentProjectAction = {
 export type ProjectsAction =
   | SetProjectsAction
   | SetCurrentProjectAction
-  | CreateSingleProjectAction;
+  | CreateSingleProjectAction
+  | UpdateSingleProjectAction;

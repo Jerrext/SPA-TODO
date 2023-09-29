@@ -14,7 +14,7 @@ const Projects = () => {
   const dispatch = useDispatch();
 
   const projectsList = useTypedSelector((state) => state.projects.projectsList);
-  const isLoader = useTypedSelector((state) => state.page.isLoader);
+  const isLoader = useTypedSelector((state) => state.page.isProjectsLoader);
 
   const onNewProjectBtnClick = () => {
     dispatch(setModalWindowType(ModalWindowType.CreateProject));

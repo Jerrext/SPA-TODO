@@ -2,14 +2,26 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import styles from './CreateProjectWindow.module.scss';
 import ModalWindow from '../ModalWindow';
 import Input from 'src/components/Input/Input';
-import { InputType } from 'src/utils/@globalTypes';
+import { InputType, ModalWindowType } from 'src/utils/@globalTypes';
 import { setFieldRequiredErrorText } from 'src/utils/helpers';
 import { useDispatch } from 'react-redux';
-import { createSingleProject } from 'src/redux/actions/projectsActions';
+import {
+  createSingleProject,
+  getSingleProject,
+  setCurrentProject,
+  updateSingleProject,
+} from 'src/redux/actions/projectsActions';
+import { Project } from 'src/redux/types/projectsTypes';
 
-type CreateProjectWindowProps = {};
+type CreateProjectWindowProps = {
+  currentProject: Project | null;
+  modalWindowType: ModalWindowType;
+};
 
-const CreateProjectWindow: FC<CreateProjectWindowProps> = ({}) => {
+const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
+  currentProject,
+  modalWindowType,
+}) => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState('');
@@ -26,6 +38,34 @@ const CreateProjectWindow: FC<CreateProjectWindowProps> = ({}) => {
     dispatch(createSingleProject({ title, description, supervisor }));
   };
 
+  const onSaveBtnClick = () => {
+    currentProject &&
+      dispatch(
+        updateSingleProject({
+          id: currentProject.id,
+          data: { title, description, supervisor },
+        }),
+      );
+  };
+
+  useEffect(() => {
+    return () => {
+      if (modalWindowType === ModalWindowType.EditProject) {
+        dispatch(setCurrentProject(null));
+      }
+    };
+  }, [modalWindowType]);
+
+  useEffect(() => {
+    if (currentProject) {
+      const { title, supervisor, description } = currentProject;
+
+      setTitle(title);
+      setSupervisor(supervisor);
+      setDescription(description);
+    }
+  }, [currentProject]);
+
   useEffect(() => {
     setFieldRequiredErrorText(titleTouched, title, setTitleError);
   }, [title, titleTouched]);
@@ -38,6 +78,16 @@ const CreateProjectWindow: FC<CreateProjectWindowProps> = ({}) => {
     );
   }, [supervisor, supervisorTouched]);
 
+  const isFieldsChanged = useMemo(() => {
+    if (currentProject) {
+      return (
+        title !== currentProject.title ||
+        description !== currentProject.description ||
+        supervisor !== currentProject.supervisor
+      );
+    }
+  }, [currentProject, title, description, supervisor]);
+
   const isValid = useMemo(() => {
     return (
       titleError.length === 0 &&
@@ -49,10 +99,10 @@ const CreateProjectWindow: FC<CreateProjectWindowProps> = ({}) => {
 
   return (
     <ModalWindow
-      title="Создание проекта"
-      btnTitle="Создать проект"
-      onSubmit={onCreateProjectBtnSubmit}
-      isValid={isValid}>
+      title={currentProject ? currentProject.title : 'Создание проекта'}
+      btnTitle={currentProject ? 'Сохранить' : 'Создать проект'}
+      onSubmit={currentProject ? onSaveBtnClick : onCreateProjectBtnSubmit}
+      isValid={!isValid || (!!currentProject && !isFieldsChanged)}>
       <div className={styles.row}>
         <Input
           value={title}

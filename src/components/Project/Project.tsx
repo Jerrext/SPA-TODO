@@ -6,7 +6,10 @@ import { ButtonType, ModalWindowType } from 'src/utils/@globalTypes';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setModalWindowType } from 'src/redux/actions/pageActions';
-import { deleteSingleProject } from 'src/redux/actions/projectsActions';
+import {
+  deleteSingleProject,
+  getSingleProject,
+} from 'src/redux/actions/projectsActions';
 
 type ProjectProps = {
   id: number;
@@ -19,7 +22,8 @@ const Project: FC<ProjectProps> = ({ title, description, supervisor, id }) => {
   const dispatch = useDispatch();
 
   const onEditBtnClick = () => {
-    dispatch(setModalWindowType(ModalWindowType.CreateProject));
+    dispatch(setModalWindowType(ModalWindowType.EditProject));
+    dispatch(getSingleProject(id));
   };
   const onDeleteBtnClick = () => {
     dispatch(deleteSingleProject({ data: id }));

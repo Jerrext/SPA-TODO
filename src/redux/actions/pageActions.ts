@@ -6,7 +6,12 @@ export const setModalWindowType = (payload: ModalWindowType | null) => ({
   payload,
 });
 
-export const setIsLoader = (payload: boolean) => ({
-  type: PageActionTypes.SET_IS_LOADER,
+export const setIsProjectsLoader = (payload: boolean) => ({
+  type: PageActionTypes.SET_IS_PROJECTS_LOADER,
+  payload,
+});
+
+export const setIsWindowLoader = (payload: boolean) => ({
+  type: PageActionTypes.SET_IS_WINDOW_LOADER,
   payload,
 });
