@@ -4,14 +4,11 @@ import { Outlet } from 'react-router-dom';
 import { ModalWindowType } from 'src/utils/@globalTypes';
 import CreateProjectWindow from 'src/components/ModalWindow/CreateProjectWindow/CreateProjectWindow';
 import { useTypedSelector } from 'src/utils/hooks';
+import { PageSelectors, ProjectsSelectors } from 'src/redux/selectors/selectors';
 
 const PageContainer = () => {
-  const modalWindowType = useTypedSelector(
-    (state) => state.page.modalWindowType,
-  );
-  const currentProject = useTypedSelector(
-    (state) => state.projects.currentProject,
-  );
+  const modalWindowType = useTypedSelector(PageSelectors.getModalWindowType);
+  const currentProject = useTypedSelector(ProjectsSelectors.getCurrentProject);
 
   const getCurrentWindow = () => {
     switch (modalWindowType) {

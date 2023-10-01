@@ -1,9 +1,12 @@
-import { PageAction, PageActionTypes, PageState } from '../types/pageTypes';
+import { LoadingTypes, PageAction, PageActionTypes, PageState } from '../types/pageTypes';
 
 const initialState: PageState = {
   modalWindowType: null,
-  isPageLoader: false,
-  isWindowLoader: false,
+  loaders: {
+    [LoadingTypes.ProjectsList]: false,
+    [LoadingTypes.TasksList]: false,
+    [LoadingTypes.SingleProject]: false,
+  },
 };
 
 export const pageReducer = (
@@ -13,10 +16,11 @@ export const pageReducer = (
   switch (type) {
     case PageActionTypes.SET_MODAL_WINDOW_TYPE:
       return { ...state, modalWindowType: payload };
-    case PageActionTypes.SET_IS_PAGE_LOADER:
-      return { ...state, isPageLoader: payload };
-    case PageActionTypes.SET_IS_WINDOW_LOADER:
-      return { ...state, isWindowLoader: payload };
+    case PageActionTypes.TOGGLE_IS_LOADING:
+      return {
+        ...state,
+        loaders: { ...state.loaders, [payload]: !state.loaders[payload] },
+      };
     default:
       return state;
   }

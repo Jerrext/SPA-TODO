@@ -2,33 +2,41 @@ import { ModalWindowType } from 'src/utils/@globalTypes';
 
 export enum PageActionTypes {
   SET_MODAL_WINDOW_TYPE = 'SET_MODAL_WINDOW_TYPE',
-  SET_IS_PAGE_LOADER = 'SET_IS_PAGE_LOADER',
-  SET_IS_WINDOW_LOADER = 'SET_IS_WINDOW_LOADER',
-  SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
+  TOGGLE_IS_LOADING = 'TOGGLE_IS_LOADING',
 }
+
+export enum LoadingTypes {
+  ProjectsList = 'projectsList',
+  TasksList = 'tasksList',
+  SingleProject = 'singleProject',
+}
+
+//
+
+export type LoadingPayload = {
+  loaderType: LoadingTypes;
+  status: boolean;
+};
+
+//
 
 export type PageState = {
   modalWindowType: ModalWindowType | null;
-  isPageLoader: boolean;
-  isWindowLoader: boolean;
+  loaders: {
+    [LoadingTypes.ProjectsList]: boolean;
+    [LoadingTypes.TasksList]: boolean;
+    [LoadingTypes.SingleProject]: boolean;
+  };
 };
 
-type ModalWindowAction = {
+export type ModalWindowAction = {
   type: PageActionTypes.SET_MODAL_WINDOW_TYPE;
   payload: ModalWindowType | null;
 };
 
-type IsProjectsLoaderAction = {
-  type: PageActionTypes.SET_IS_PAGE_LOADER;
-  payload: boolean;
+export type IsLoadingAction = {
+  type: PageActionTypes.TOGGLE_IS_LOADING;
+  payload: LoadingTypes;
 };
 
-type IsWindowLoaderAction = {
-  type: PageActionTypes.SET_IS_WINDOW_LOADER;
-  payload: boolean;
-};
-
-export type PageAction =
-  | ModalWindowAction
-  | IsProjectsLoaderAction
-  | IsWindowLoaderAction;
+export type PageAction = ModalWindowAction | IsLoadingAction;

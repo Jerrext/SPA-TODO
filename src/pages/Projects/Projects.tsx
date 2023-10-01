@@ -9,12 +9,13 @@ import { getProjectsList } from 'src/redux/actions/projectsActions';
 import { useTypedSelector } from 'src/utils/hooks';
 import Loader from 'src/components/Loader/Loader';
 import EmptyState from 'src/components/EmptyState/EmptyState';
+import { PageSelectors, ProjectsSelectors } from 'src/redux/selectors/selectors';
 
 const Projects = () => {
   const dispatch = useDispatch();
 
-  const projectsList = useTypedSelector((state) => state.projects.projectsList);
-  const isLoader = useTypedSelector((state) => state.page.isPageLoader);
+  const projectsList = useTypedSelector(ProjectsSelectors.getProjectsList);
+  const isLoader = useTypedSelector(PageSelectors.getIsProjectsPageLoading);
 
   const onNewProjectBtnClick = () => {
     dispatch(setModalWindowType(ModalWindowType.CreateProject));
@@ -25,10 +26,7 @@ const Projects = () => {
   }, []);
 
   return (
-    <PageHeader
-      title="Проекты"
-      btnTitle="Новый проект"
-      onClick={onNewProjectBtnClick}>
+    <PageHeader title="Проекты" btnTitle="Новый проект" onClick={onNewProjectBtnClick}>
       <div className={styles.header}>
         <p className={styles.title}>Имя</p>
         <p className={styles.description}>Краткое описание</p>

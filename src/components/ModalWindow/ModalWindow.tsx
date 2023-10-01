@@ -25,8 +25,6 @@ const ModalWindow: FC<ModalWindowProps> = ({
 }) => {
   const dispatch = useDispatch();
 
-  const isLoader = useTypedSelector((state) => state.page.isWindowLoader);
-
   const [visibility, setVisibility] = useState(false);
 
   const onCancelBtnClick = () => {
@@ -47,30 +45,22 @@ const ModalWindow: FC<ModalWindowProps> = ({
           [styles.showOverlay]: visibility,
         })}
         onClick={onCancelBtnClick}></div>
-      {isLoader ? (
-        <Loader />
-      ) : (
-        <div
-          className={classNames(styles.window, {
-            [styles.showWindow]: visibility,
-          })}>
-          <h2 className={styles.title}>{title}</h2>
-          {children}
-          <div className={styles.btnWrapper}>
-            <Button
-              title={btnTitle}
-              type={ButtonType.PRIMARY}
-              onClick={onSubmit}
-              disabled={isValid}
-            />
-            <Button
-              title="Отмена"
-              type={ButtonType.SECONDARY}
-              onClick={onCancelBtnClick}
-            />
-          </div>
+      <div
+        className={classNames(styles.window, {
+          [styles.showWindow]: visibility,
+        })}>
+        <h2 className={styles.title}>{title}</h2>
+        {children}
+        <div className={styles.btnWrapper}>
+          <Button
+            title={btnTitle}
+            type={ButtonType.PRIMARY}
+            onClick={onSubmit}
+            disabled={isValid}
+          />
+          <Button title="Отмена" type={ButtonType.SECONDARY} onClick={onCancelBtnClick} />
         </div>
-      )}
+      </div>
     </div>
   );
 };

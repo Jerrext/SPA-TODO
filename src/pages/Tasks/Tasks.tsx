@@ -18,18 +18,21 @@ import Input from 'src/components/Input';
 import EmptyState from 'src/components/EmptyState';
 import Loader from 'src/components/Loader';
 import { TaskStatusTypes } from 'src/redux/types/boardTypes';
-import { getTasksList } from 'src/redux/actions/tasksActions';
+import { getTasksList } from 'src/redux/actions/boardActions';
+import {
+  PageSelectors,
+  ProjectsSelectors,
+  TasksSelectors,
+} from 'src/redux/selectors/selectors';
 
 const Tasks = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const currentProject = useTypedSelector((state) => state.projects.currentProject);
-  const isLoader = useTypedSelector((state) => state.page.isPageLoader);
-  const taskStagesList = useTypedSelector((state) => state.board.taskStagesList);
-
-  const tasksList: any = [];
+  const currentProject = useTypedSelector(ProjectsSelectors.getCurrentProject);
+  const isLoading = useTypedSelector(PageSelectors.getIsTasksPageLoading);
+  const taskStagesList = useTypedSelector(TasksSelectors.getTasksStagesList);
 
   const [query, setQuery] = useState('');
 
@@ -72,7 +75,7 @@ const Tasks = () => {
       btnTitle="Новая задача"
       onClick={onNewTaskBtnClick}
       isHomeBtn>
-      {!isLoader ? (
+      {!isLoading ? (
         currentProject && (
           <>
             <div className={styles.projectsInfo}>

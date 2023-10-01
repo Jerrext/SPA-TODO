@@ -25,7 +25,6 @@ export const boardReducer = (
           items: payload.filter((task) => task.status === stage.statusType),
         };
       });
-      console.log();
       return { ...state, taskStagesList: formattedList };
     default:
       return state;
