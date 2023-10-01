@@ -17,17 +17,17 @@ import { setModalWindowType } from 'src/redux/actions/pageActions';
 import Input from 'src/components/Input';
 import EmptyState from 'src/components/EmptyState';
 import Loader from 'src/components/Loader';
+import { TaskStatusTypes } from 'src/redux/types/boardTypes';
+import { getTasksList } from 'src/redux/actions/tasksActions';
 
 const Tasks = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const currentProject = useTypedSelector(
-    (state) => state.projects.currentProject,
-  );
-
+  const currentProject = useTypedSelector((state) => state.projects.currentProject);
   const isLoader = useTypedSelector((state) => state.page.isPageLoader);
+  const taskStagesList = useTypedSelector((state) => state.board.taskStagesList);
 
   const tasksList: any = [];
 
@@ -54,7 +54,10 @@ const Tasks = () => {
   };
 
   useEffect(() => {
-    id && dispatch(getSingleProject(+id));
+    if (id) {
+      dispatch(getSingleProject(+id));
+      dispatch(getTasksList(+id));
+    }
   }, [id]);
 
   useEffect(() => {
@@ -115,29 +118,25 @@ const Tasks = () => {
               />
             </div>
             <div className={styles.board}>
-              <div className={styles.boardItem}>
-                <p>Queue</p>
-                <div className={styles.card}>
-                  {tasksList.length > 0 ? (
-                    tasksList.map((item: any) => {
-                      return <div></div>;
-                    })
-                  ) : (
-                    <EmptyState
-                      title="Очередь задач пуста"
-                      description="Создайте новую задачу"
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={styles.boardItem}>
-                <p>Development</p>
-                <div className={styles.card}></div>
-              </div>
-              <div className={styles.boardItem}>
-                <p>Done</p>
-                <div className={styles.card}></div>
-              </div>
+              {taskStagesList.map(({ id, title, items, statusType }) => {
+                return (
+                  <div key={id} className={styles.boardItem}>
+                    <p>{title}</p>
+                    <div className={styles.card}>
+                      {statusType === TaskStatusTypes.Queue && items.length === 0 ? (
+                        <EmptyState
+                          title="Очередь задач пуста"
+                          description="Создайте новую задачу"
+                        />
+                      ) : (
+                        items.map(({ id, title }) => {
+                          return <div key={id}>{title}</div>;
+                        })
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </>
         )

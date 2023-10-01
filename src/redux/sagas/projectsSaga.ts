@@ -20,7 +20,7 @@ import API from '../api';
 import { AxiosResponse } from 'axios';
 import { setIsPageLoader, setModalWindowType } from '../actions/pageActions';
 
-export function* getProjectsWorker() {
+function* getProjectsWorker() {
   try {
     yield put(setIsPageLoader(true));
     const { data }: AxiosResponse<ProjectList> = yield call(
@@ -35,7 +35,7 @@ export function* getProjectsWorker() {
   }
 }
 
-export function* createSingleProjectWorker(action: CreateSingleProjectAction) {
+function* createSingleProjectWorker(action: CreateSingleProjectAction) {
   try {
     const { data }: AxiosResponse<Project> = yield call(
       API.createSingleProjectRequest,
@@ -50,7 +50,7 @@ export function* createSingleProjectWorker(action: CreateSingleProjectAction) {
   }
 }
 
-export function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
+function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
   const { data, callback } = action.payload;
 
   try {
@@ -68,7 +68,7 @@ export function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
   }
 }
 
-export function* getSingleProjectWorker(action: GetSingleProjectAction) {
+function* getSingleProjectWorker(action: GetSingleProjectAction) {
   try {
     yield put(setIsPageLoader(true));
     const { data }: AxiosResponse<Project> = yield call(
@@ -84,7 +84,7 @@ export function* getSingleProjectWorker(action: GetSingleProjectAction) {
   }
 }
 
-export function* updateSingleProjectWorker(action: UpdateSingleProjectAction) {
+function* updateSingleProjectWorker(action: UpdateSingleProjectAction) {
   const { data, id } = action.payload;
 
   try {

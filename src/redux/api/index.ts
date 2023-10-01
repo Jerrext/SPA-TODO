@@ -32,10 +32,15 @@ const updateSingleProjectRequest = (id: number, data: ProjectPayload) => {
   return firstApiAxios.put(`/projects/${id}`, data);
 };
 
+const getTasksListRequest = (id: number) => {
+  return firstApiAxios.get(`/projects/${id}/tasks`);
+};
+
 export default {
   getProjectsRequest,
   createSingleProjectRequest,
   deleteSingleProjectRequest,
   getSingleProjectRequest,
   updateSingleProjectRequest,
+  getTasksListRequest,
 };

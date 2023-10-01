@@ -4,6 +4,9 @@
   display: flex;
   justify-content: space-between;
   gap: 40px;
+  border: 1px solid $color-project;
+  border-radius: $radius;
+  padding: 20px 30px;
 
   div {
     p:first-child {
