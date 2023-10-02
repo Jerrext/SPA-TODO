@@ -1,0 +1,77 @@
+@import 'src/assets/mixins';
+
+.wrapper {
+  border-radius: $radius;
+  background-color: $color-project;
+  padding: 10px;
+  cursor: grab;
+  transition: $transition;
+
+  &:hover {
+    background-color: $color-project-hover;
+  }
+}
+
+.title {
+  @include h5();
+  margin-bottom: 2px;
+}
+
+.highest {
+  color: $color-priority-highest;
+}
+
+.high {
+  color: $color-priority-high;
+}
+
+.medium {
+  color: $color-priority-medium;
+}
+
+.low {
+  color: $color-priority-low;
+}
+
+.lowest {
+  color: $color-priority-lowest;
+}
+
+.top {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.num {
+  @include h5($color-primary);
+  padding: 5px;
+  border-radius: $radius;
+  border: 1px solid $color-primary;
+  display: flex;
+}
+
+.date {
+  @include h5($color-text-white);
+}
+
+.priority {
+  width: 33%;
+}
+
+.bntsWrapper {
+  display: flex;
+  gap: 5px;
+  align-self: center;
+}
+
+.taskTitle {
+  @include h4();
+  margin-top: 5px;
+}

@@ -24,6 +24,7 @@ import {
   ProjectsSelectors,
   TasksSelectors,
 } from 'src/redux/selectors/selectors';
+import Task from 'src/components/Task/Task';
 
 const Tasks = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,11 @@ const Tasks = () => {
   const currentProject = useTypedSelector(ProjectsSelectors.getCurrentProject);
   const isLoading = useTypedSelector(PageSelectors.getIsTasksPageLoading);
   const taskStagesList = useTypedSelector(TasksSelectors.getTasksStagesList);
+  const priorities = useTypedSelector(TasksSelectors.getPriorities);
+
+  // useEffect(() => {
+  //   console.log(priorities);
+  // }, [priorities]);
 
   const [query, setQuery] = useState('');
 
@@ -124,7 +130,7 @@ const Tasks = () => {
               {taskStagesList.map(({ id, title, items, statusType }) => {
                 return (
                   <div key={id} className={styles.boardItem}>
-                    <p>{title}</p>
+                    <p className={styles.statusTitle}>{title}</p>
                     <div className={styles.card}>
                       {statusType === TaskStatusTypes.Queue && items.length === 0 ? (
                         <EmptyState
@@ -132,8 +138,10 @@ const Tasks = () => {
                           description="Создайте новую задачу"
                         />
                       ) : (
-                        items.map(({ id, title }) => {
-                          return <div key={id}>{title}</div>;
+                        items.map((task) => {
+                          return (
+                            <Task key={task.id} task={task} priorities={priorities} />
+                          );
                         })
                       )}
                     </div>

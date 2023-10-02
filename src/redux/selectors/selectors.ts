@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 import { RootState } from '../reducers';
 import { LoadingTypes } from '../types/pageTypes';
 
@@ -7,6 +8,7 @@ export const PageSelectors = {
   getModalWindowType: (state: RootState) => state.page.modalWindowType,
   getIsTasksPageLoading: (state: RootState) => {
     const loaders = state.page.loaders;
+    // console.log(loaders);
     return (
       loaders[LoadingTypes.SingleProject] === true ||
       loaders[LoadingTypes.TasksList] === true
@@ -23,4 +25,17 @@ export const ProjectsSelectors = {
 
 export const TasksSelectors = {
   getTasksStagesList: (state: RootState) => state.board.taskStagesList,
+  getPriorities: createSelector(
+    [(state: RootState) => state.board.priorities],
+    (priorities) => {
+      return Object.fromEntries(priorities.map((item) => [item.value, item.label]));
+    },
+  ),
+  // getPriorities: (state: RootState) => {
+  //   const a = Object.fromEntries(
+  //     state.board.priorities.map((item) => [item.value, item.label]),
+  //   );
+  //   // console.log(a);
+  //   return a;
+  // },
 };

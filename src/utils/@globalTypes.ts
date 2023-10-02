@@ -16,3 +16,10 @@ export enum InputType {
   PASSWORD = 'password',
   TEXTAREA = 'textarea',
 }
+
+export type OptionType = {
+  value: number;
+  label: string;
+};
+
+export type OptionsListType = OptionType[];

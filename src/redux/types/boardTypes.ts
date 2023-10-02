@@ -1,3 +1,5 @@
+import { OptionsListType } from 'src/utils/@globalTypes';
+
 export enum BoardActionTypes {
   GET_TASKS_LIST = 'GET_TASKS_LIST',
   SET_TASK_STAGES_LIST = 'SET_TASK_STAGES_LIST',
@@ -11,23 +13,37 @@ export enum TaskStatusTypes {
   Done,
 }
 
+export enum PriorityTypes {
+  Highest,
+  High,
+  Medium,
+  Low,
+  Lowest,
+}
+
 //
 
-type Task = {
+export type Priority = {
+  [k: number]: string;
+};
+
+export type TaskType = {
   title: string;
   description: string;
   date_of_creation: string;
   end_date: string;
-  priority: string;
+  priority: PriorityTypes;
   status: TaskStatusTypes;
   start_date: string;
   id: number;
   projectId: number;
-  subTasksList: any;
-  comments: any;
+  num: number;
+  order: number;
+  subTasksList: [];
+  comments: [];
 };
 
-export type TasksList = Task[];
+export type TasksList = TaskType[];
 
 type TaskStatus = {
   id: number;
@@ -42,6 +58,7 @@ type Board = TaskStatus[];
 
 export type BoardState = {
   taskStagesList: Board;
+  priorities: OptionsListType;
 };
 
 //
