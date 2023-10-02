@@ -42,7 +42,9 @@ const Tasks = () => {
 
   const [query, setQuery] = useState('');
 
-  const onNewTaskBtnClick = () => {};
+  const onNewTaskBtnClick = () => {
+    dispatch(setModalWindowType(ModalWindowType.CreateTask));
+  };
 
   const onSearchBtnClick = () => {};
 

@@ -1,0 +1,88 @@
+@import 'src/assets/mixins';
+
+.customSelect {
+  &__title {
+    @include h4();
+    margin-bottom: 10px;
+  }
+
+  &__required::after {
+    content: '*';
+    color: $color-error;
+    margin-left: 5px;
+  }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__errText {
+    @include h5($color-error);
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+  }
+
+  &__control {
+    padding: 0px 20px;
+    height: 50px;
+    border-radius: $radius;
+    width: 100%;
+    cursor: text !important;
+    @include h5($color-text-white);
+  }
+
+  &__indicators {
+    gap: 3px;
+  }
+
+  &__indicator {
+    cursor: pointer !important;
+
+    &:hover > svg > path {
+      fill: $color-text-gray-light !important;
+    }
+    > svg > path {
+      fill: $color-text-gray !important;
+    }
+  }
+
+  &__placeholder {
+    @include h5();
+  }
+
+  &__menu {
+    left: 0;
+    top: auto !important;
+    margin-top: -4px;
+    padding: 0;
+    box-shadow: 1px 1px 4px rgb(0 0 0 / 20%);
+    background-color: $color-project !important;
+    overflow-y: auto;
+    border-radius: 0 0 $radius $radius;
+  }
+
+  &__option {
+    padding: 10px 20px;
+    cursor: pointer !important;
+    // @include h5($color-text-white);
+    font-size: 14px !important;
+    background-color: $color-project-hover;
+
+    &:hover {
+      background-color: $color-project;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &-disabled {
+    cursor: not-allowed;
+  }
+
+  // &__noOptionsMessage {
+  //   background-color: black;
+  // }
+}

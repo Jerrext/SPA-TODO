@@ -20,11 +20,11 @@ const initialState: BoardState = {
   //   [PriorityTypes.Lowest]: 'Очень низкий',
   // },
   priorities: [
-    { value: PriorityTypes.Highest, label: 'Очень высокий' },
-    { value: PriorityTypes.High, label: 'Высокий' },
-    { value: PriorityTypes.Medium, label: 'Средний' },
-    { value: PriorityTypes.Low, label: 'Низкий' },
-    { value: PriorityTypes.Lowest, label: 'Очень низкий' },
+    { value: `${PriorityTypes.Highest}`, label: 'Очень высокий', color: '#ff4800' },
+    { value: `${PriorityTypes.High}`, label: 'Высокий', color: '#ff7b00' },
+    { value: `${PriorityTypes.Medium}`, label: 'Средний', color: '#ffee00' },
+    { value: `${PriorityTypes.Low}`, label: 'Низкий', color: '#c8ff00fd' },
+    { value: `${PriorityTypes.Lowest}`, label: 'Очень низкий', color: '#7bff00' },
   ],
 };
 

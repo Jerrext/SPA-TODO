@@ -7,6 +7,7 @@ export enum ButtonType {
 export enum ModalWindowType {
   CreateProject,
   EditProject,
+  CreateTask,
 }
 
 export enum InputType {
@@ -18,8 +19,9 @@ export enum InputType {
 }
 
 export type OptionType = {
-  value: number;
+  value: string;
   label: string;
+  color?: string;
 };
 
 export type OptionsListType = OptionType[];

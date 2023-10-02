@@ -4,38 +4,54 @@ import { LoadingTypes } from '../types/pageTypes';
 
 export const getState = (state: RootState) => state;
 
-export const PageSelectors = {
-  getModalWindowType: (state: RootState) => state.page.modalWindowType,
-  getIsTasksPageLoading: (state: RootState) => {
-    const loaders = state.page.loaders;
-    // console.log(loaders);
-    return (
-      loaders[LoadingTypes.SingleProject] === true ||
-      loaders[LoadingTypes.TasksList] === true
-    );
+const getModalWindowType = (state: RootState) => state.page.modalWindowType;
+const getIsTasksPageLoading = (state: RootState) => {
+  const loaders = state.page.loaders;
+  return (
+    loaders[LoadingTypes.SingleProject] === true ||
+    loaders[LoadingTypes.TasksList] === true
+  );
+};
+const getIsProjectsPageLoading = (state: RootState) =>
+  state.page.loaders[LoadingTypes.ProjectsList];
+
+//
+
+const getCurrentProject = (state: RootState) => state.projects.currentProject;
+const getProjectsList = (state: RootState) => state.projects.projectsList;
+
+//
+
+const getTasksStagesList = (state: RootState) => state.board.taskStagesList;
+const getPriorityOptions = (state: RootState) => state.board.priorities;
+const getPriorities = createSelector([getPriorityOptions], (priorities) => {
+  return Object.fromEntries(priorities.map((item) => [item.value, item.label]));
+});
+const getTaskStatusOptions = createSelector(
+  [(state: RootState) => state.board.taskStagesList],
+  (statuses) => {
+    return statuses.map((item) => {
+      return { value: item.statusType.toString(), label: item.title };
+    });
   },
-  getIsProjectsPageLoading: (state: RootState) =>
-    state.page.loaders[LoadingTypes.ProjectsList],
+);
+
+//
+
+export const PageSelectors = {
+  getModalWindowType,
+  getIsTasksPageLoading,
+  getIsProjectsPageLoading,
 };
 
 export const ProjectsSelectors = {
-  getCurrentProject: (state: RootState) => state.projects.currentProject,
-  getProjectsList: (state: RootState) => state.projects.projectsList,
+  getCurrentProject,
+  getProjectsList,
 };
 
 export const TasksSelectors = {
-  getTasksStagesList: (state: RootState) => state.board.taskStagesList,
-  getPriorities: createSelector(
-    [(state: RootState) => state.board.priorities],
-    (priorities) => {
-      return Object.fromEntries(priorities.map((item) => [item.value, item.label]));
-    },
-  ),
-  // getPriorities: (state: RootState) => {
-  //   const a = Object.fromEntries(
-  //     state.board.priorities.map((item) => [item.value, item.label]),
-  //   );
-  //   // console.log(a);
-  //   return a;
-  // },
+  getTasksStagesList,
+  getPriorityOptions,
+  getPriorities,
+  getTaskStatusOptions,
 };

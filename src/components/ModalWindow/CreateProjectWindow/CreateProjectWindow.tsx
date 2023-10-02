@@ -15,9 +15,7 @@ type CreateProjectWindowProps = {
   currentProject: Project | null;
 };
 
-const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
-  currentProject,
-}) => {
+const CreateProjectWindow: FC<CreateProjectWindowProps> = ({ currentProject }) => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState('');
@@ -60,11 +58,7 @@ const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
   }, [title, titleTouched]);
 
   useEffect(() => {
-    setFieldRequiredErrorText(
-      supervisorTouched,
-      supervisor,
-      setSupervisorError,
-    );
+    setFieldRequiredErrorText(supervisorTouched, supervisor, setSupervisorError);
   }, [supervisor, supervisorTouched]);
 
   const isFieldsChanged = useMemo(() => {
@@ -92,35 +86,37 @@ const CreateProjectWindow: FC<CreateProjectWindowProps> = ({
       btnTitle={currentProject ? 'Сохранить' : 'Создать проект'}
       onSubmit={currentProject ? onSaveBtnClick : onCreateProjectBtnSubmit}
       isValid={!isValid || (!!currentProject && !isFieldsChanged)}>
-      <div className={styles.row}>
+      <div className={styles.column}>
+        <div className={styles.row}>
+          <Input
+            value={title}
+            title="Название проекта"
+            placeholder="Введите название проекта"
+            type={InputType.TEXT}
+            onChange={setTitle}
+            onBlur={setTitleTouched}
+            errText={titleError}
+            required
+          />
+          <Input
+            value={supervisor}
+            title="Руководитель проекта"
+            placeholder="Введите имя"
+            type={InputType.TEXT}
+            onChange={setSupervisor}
+            onBlur={setSupervisorTouched}
+            errText={supervisorError}
+            required
+          />
+        </div>
         <Input
-          value={title}
-          title="Название проекта"
-          placeholder="Введите название проекта"
-          type={InputType.TEXT}
-          onChange={setTitle}
-          onBlur={setTitleTouched}
-          errText={titleError}
-          required
-        />
-        <Input
-          value={supervisor}
-          title="Руководитель проекта"
-          placeholder="Введите имя"
-          type={InputType.TEXT}
-          onChange={setSupervisor}
-          onBlur={setSupervisorTouched}
-          errText={supervisorError}
-          required
+          value={description}
+          title="Описание проекта (кратко)"
+          placeholder="Опишите проект"
+          type={InputType.TEXTAREA}
+          onChange={setDescription}
         />
       </div>
-      <Input
-        value={description}
-        title="Описание проекта (кратко)"
-        placeholder="Опишите проект"
-        type={InputType.TEXTAREA}
-        onChange={setDescription}
-      />
     </ModalWindow>
   );
 };
