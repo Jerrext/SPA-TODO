@@ -6,6 +6,8 @@ export enum BoardActionTypes {
   SET_TASK_STAGES_LIST = 'SET_TASK_STAGES_LIST',
   CREATE_TASK = 'CREATE_TASK',
   SET_TASK = 'SET_TASK',
+  DELETE_TASK = 'DELETE_TASK',
+  REMOVE_TASK_FROM_LIST = 'REMOVE_TASK_FROM_LIST',
 }
 
 //
@@ -86,6 +88,7 @@ export type CreateTaskData = {
 };
 
 export type CreateTaskPayload = PayloadWithId<CreateTaskData>;
+export type DeleteTaskPayload = PayloadWithId<number>;
 
 //
 
@@ -116,10 +119,22 @@ export type SetTaskAction = {
   payload: TaskType;
 };
 
+export type DeleteTaskAction = {
+  type: BoardActionTypes.DELETE_TASK;
+  payload: DeleteTaskPayload;
+};
+
+export type RemoveTaskFromListAction = {
+  type: BoardActionTypes.REMOVE_TASK_FROM_LIST;
+  payload: number;
+};
+
 //
 
 export type BoardAction =
   | GetTasksListAction
   | SetTaskStagesListAction
   | CreateTaskAction
-  | SetTaskAction;
+  | SetTaskAction
+  | DeleteTaskAction
+  | RemoveTaskFromListAction;

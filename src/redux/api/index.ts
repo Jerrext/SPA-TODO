@@ -41,6 +41,10 @@ const createTaskRequest = (id: number, data: CreateTaskData) => {
   return firstApiAxios.post(`/projects/${id}/tasks`, data);
 };
 
+const deleteTaskRequest = (projectId: number, taskId: number) => {
+  return firstApiAxios.delete(`/projects/${projectId}/tasks/${taskId}`);
+};
+
 export default {
   getProjectsRequest,
   createSingleProjectRequest,
@@ -49,4 +53,5 @@ export default {
   updateSingleProjectRequest,
   getTasksListRequest,
   createTaskRequest,
+  deleteTaskRequest,
 };

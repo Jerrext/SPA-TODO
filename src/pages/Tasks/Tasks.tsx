@@ -29,7 +29,7 @@ import Task from 'src/components/Task/Task';
 const Tasks = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { projectId } = useParams();
 
   const currentProject = useTypedSelector(ProjectsSelectors.getCurrentProject);
   const isLoading = useTypedSelector(PageSelectors.getIsTasksPageLoading);
@@ -65,11 +65,11 @@ const Tasks = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      dispatch(getSingleProject(+id));
-      dispatch(getTasksList(+id));
+    if (projectId) {
+      dispatch(getSingleProject(+projectId));
+      dispatch(getTasksList(+projectId));
     }
-  }, [id]);
+  }, [projectId]);
 
   useEffect(() => {
     return () => {
@@ -83,7 +83,7 @@ const Tasks = () => {
       btnTitle="Новая задача"
       onClick={onNewTaskBtnClick}
       isHomeBtn>
-      {!isLoading ? (
+      {!isLoading && projectId ? (
         currentProject && (
           <>
             <div className={styles.projectsInfo}>
@@ -129,9 +129,9 @@ const Tasks = () => {
               />
             </div>
             <div className={styles.board}>
-              {taskStagesList.map(({ id, title, items, statusType }) => {
+              {taskStagesList.map(({ id: stageId, title, items, statusType }) => {
                 return (
-                  <div key={id} className={styles.boardItem}>
+                  <div key={stageId} className={styles.boardItem}>
                     <p className={styles.statusTitle}>{title}</p>
                     <div className={styles.card}>
                       {statusType === TaskStatusTypes.Queue && items.length === 0 ? (
@@ -142,7 +142,12 @@ const Tasks = () => {
                       ) : (
                         items.map((task) => {
                           return (
-                            <Task key={task.id} task={task} priorities={priorities} />
+                            <Task
+                              key={task.id}
+                              projectId={+projectId}
+                              task={task}
+                              priorities={priorities}
+                            />
                           );
                         })
                       )}

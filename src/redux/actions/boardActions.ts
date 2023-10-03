@@ -2,7 +2,10 @@ import {
   BoardActionTypes,
   CreateTaskAction,
   CreateTaskPayload,
+  DeleteTaskAction,
+  DeleteTaskPayload,
   GetTasksListAction,
+  RemoveTaskFromListAction,
   SetTaskAction,
   SetTaskStagesListAction,
   SubtaskType,
@@ -27,5 +30,15 @@ export const createTask = (payload: CreateTaskPayload): CreateTaskAction => ({
 
 export const setTask = (payload: TaskType): SetTaskAction => ({
   type: BoardActionTypes.SET_TASK,
+  payload,
+});
+
+export const deleteTask = (payload: DeleteTaskPayload): DeleteTaskAction => ({
+  type: BoardActionTypes.DELETE_TASK,
+  payload,
+});
+
+export const removeTaskFromList = (payload: number): RemoveTaskFromListAction => ({
+  type: BoardActionTypes.REMOVE_TASK_FROM_LIST,
   payload,
 });

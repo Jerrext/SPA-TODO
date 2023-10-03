@@ -2,6 +2,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import {
   BoardActionTypes,
   CreateTaskAction,
+  DeleteTaskAction,
   GetTasksListAction,
   SubtaskType,
   TaskType,
@@ -9,7 +10,7 @@ import {
 } from '../types/boardTypes';
 import API from '../api/index';
 import axios, { AxiosResponse } from 'axios';
-import { setTask, setTaskStagesList } from '../actions/boardActions';
+import { removeTaskFromList, setTask, setTaskStagesList } from '../actions/boardActions';
 import { setModalWindowType, toggleIsLoading } from '../actions/pageActions';
 import { LoadingTypes } from '../types/pageTypes';
 
@@ -46,9 +47,22 @@ export function* createTaskWorker(action: CreateTaskAction) {
   }
 }
 
+export function* deleteTaskWorker(action: DeleteTaskAction) {
+  const { id, data } = action.payload;
+  try {
+    yield call(API.deleteTaskRequest, id, data);
+    yield put(removeTaskFromList(data));
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.warn(error.message);
+    }
+  }
+}
+
 export default function* boardSaga() {
   yield all([
     takeLatest(BoardActionTypes.GET_TASKS_LIST, getTasksListWorker),
     takeLatest(BoardActionTypes.CREATE_TASK, createTaskWorker),
+    takeLatest(BoardActionTypes.DELETE_TASK, deleteTaskWorker),
   ]);
 }

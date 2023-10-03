@@ -7,7 +7,7 @@ import Tasks from './Tasks';
 
 export enum RoutesList {
   Home = '/',
-  Tasks = '/:id/tasks',
+  Tasks = '/:projectId/tasks',
   Default = '*',
 }
 

@@ -10,8 +10,11 @@ import {
 import Button from '../Button/Button';
 import { ButtonType } from 'src/utils/@globalTypes';
 import { DeleteIcon, EditIcon } from 'src/assets/icons';
+import { useDispatch } from 'react-redux';
+import { deleteTask } from 'src/redux/actions/boardActions';
 
 type TaskProps = {
+  projectId: number;
   task: TaskType;
   priorities: Priority;
 };
@@ -25,6 +28,7 @@ const priorityStyles = {
 };
 
 const Task: FC<TaskProps> = ({
+  projectId,
   task: {
     title,
     // description,
@@ -33,18 +37,22 @@ const Task: FC<TaskProps> = ({
     priority,
     start_date,
     status,
-    // id,
+    id,
     // projectId,
     num,
     // order,
   },
   priorities,
 }) => {
+  const dispatch = useDispatch();
+
   const priorityClassName = priorityStyles[priority];
 
   const onEditBtnClick = () => {};
 
-  const onDeleteBtnClick = () => {};
+  const onDeleteBtnClick = () => {
+    dispatch(deleteTask({ id: projectId, data: id }));
+  };
 
   return (
     <div className={styles.wrapper}>

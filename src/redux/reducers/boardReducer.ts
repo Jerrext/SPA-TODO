@@ -50,6 +50,13 @@ export const boardReducer = (
             : stage,
         ),
       };
+    case BoardActionTypes.REMOVE_TASK_FROM_LIST:
+      return {
+        ...state,
+        taskStagesList: state.taskStagesList.map((stage) => {
+          return { ...stage, items: stage.items.filter((task) => task.id !== payload) };
+        }),
+      };
     default:
       return state;
   }
