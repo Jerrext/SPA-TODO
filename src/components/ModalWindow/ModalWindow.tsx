@@ -11,9 +11,11 @@ import { useTypedSelector } from 'src/utils/hooks';
 type ModalWindowProps = {
   title: string;
   children: ReactNode;
-  btnTitle: string;
-  onSubmit: () => void;
-  isValid: boolean;
+  btnTitle?: string;
+  onSubmit?: () => void;
+  isValid?: boolean;
+  cancelTitle?: string;
+  cancelHandler?: () => void;
 };
 
 const ModalWindow: FC<ModalWindowProps> = ({
@@ -22,6 +24,8 @@ const ModalWindow: FC<ModalWindowProps> = ({
   btnTitle,
   onSubmit,
   isValid,
+  cancelHandler,
+  cancelTitle,
 }) => {
   const dispatch = useDispatch();
 
@@ -33,8 +37,10 @@ const ModalWindow: FC<ModalWindowProps> = ({
 
   useEffect(() => {
     setVisibility(true);
+    document.body.style.overflow = 'hidden';
     return () => {
       setVisibility(false);
+      document.body.style.overflow = 'auto';
     };
   }, []);
 
@@ -52,13 +58,19 @@ const ModalWindow: FC<ModalWindowProps> = ({
         <h2 className={styles.title}>{title}</h2>
         {children}
         <div className={styles.btnWrapper}>
+          {btnTitle && onSubmit && (
+            <Button
+              title={btnTitle}
+              type={ButtonType.PRIMARY}
+              onClick={onSubmit}
+              disabled={isValid}
+            />
+          )}
           <Button
-            title={btnTitle}
-            type={ButtonType.PRIMARY}
-            onClick={onSubmit}
-            disabled={isValid}
+            title={cancelTitle ? cancelTitle : 'Отмена'}
+            type={ButtonType.SECONDARY}
+            onClick={cancelHandler ? cancelHandler : onCancelBtnClick}
           />
-          <Button title="Отмена" type={ButtonType.SECONDARY} onClick={onCancelBtnClick} />
         </div>
       </div>
     </div>

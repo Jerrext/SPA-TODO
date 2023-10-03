@@ -13,7 +13,7 @@
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   background-color: #000;
   width: 100%;
   height: 100%;
@@ -32,6 +32,8 @@
   transform: translateY(40px);
   max-width: 800px;
   width: 100%;
+  overflow: auto;
+  max-height: 90%;
   opacity: 0;
   z-index: 2;
 }

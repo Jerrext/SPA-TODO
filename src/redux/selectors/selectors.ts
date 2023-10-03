@@ -35,6 +35,13 @@ const getTaskStatusOptions = createSelector(
     });
   },
 );
+const getTaskNum = createSelector([getTasksStagesList], (stages) => {
+  const tasksNumbers: number[] = [];
+  stages.forEach((stage) => {
+    stage.items.forEach((task) => tasksNumbers.push(task.num));
+  });
+  return tasksNumbers.length > 0 ? Math.max(...tasksNumbers) + 1 : 1;
+});
 
 //
 
@@ -54,4 +61,5 @@ export const TasksSelectors = {
   getPriorityOptions,
   getPriorities,
   getTaskStatusOptions,
+  getTaskNum,
 };

@@ -11,3 +11,9 @@ export const setFieldRequiredErrorText = (
     }
   }
 };
+
+export const getCurrentDate = () => {
+  const now = new Date();
+  const newDate = new Intl.DateTimeFormat();
+  return newDate.format(now);
+};

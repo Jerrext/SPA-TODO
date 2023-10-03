@@ -1,8 +1,11 @@
 import { OptionsListType } from 'src/utils/@globalTypes';
+import { PayloadWithId } from './@types';
 
 export enum BoardActionTypes {
   GET_TASKS_LIST = 'GET_TASKS_LIST',
   SET_TASK_STAGES_LIST = 'SET_TASK_STAGES_LIST',
+  CREATE_TASK = 'CREATE_TASK',
+  SET_TASK = 'SET_TASK',
 }
 
 //
@@ -39,11 +42,27 @@ export type TaskType = {
   projectId: number;
   num: number;
   order: number;
-  subTasksList: [];
+  subTasksList: SubtasksList;
   comments: [];
 };
 
 export type TasksList = TaskType[];
+
+export type SubtaskType = {
+  id: number;
+  parentTaskId: number;
+  title: string;
+  description: string;
+  date_of_creation: string;
+  end_date: string;
+  priority: PriorityTypes;
+  status: TaskStatusTypes;
+  start_date: string;
+  num: number;
+  order: number;
+};
+
+export type SubtasksList = TaskType[];
 
 type TaskStatus = {
   id: number;
@@ -53,6 +72,20 @@ type TaskStatus = {
 };
 
 type Board = TaskStatus[];
+
+export type CreateTaskData = {
+  title: string;
+  description: string;
+  date_of_creation: string;
+  end_date: string;
+  priority: PriorityTypes;
+  status: TaskStatusTypes;
+  start_date: string;
+  num: number;
+  order: number;
+};
+
+export type CreateTaskPayload = PayloadWithId<CreateTaskData>;
 
 //
 
@@ -73,6 +106,20 @@ export type SetTaskStagesListAction = {
   payload: TasksList;
 };
 
+export type CreateTaskAction = {
+  type: BoardActionTypes.CREATE_TASK;
+  payload: CreateTaskPayload;
+};
+
+export type SetTaskAction = {
+  type: BoardActionTypes.SET_TASK;
+  payload: TaskType;
+};
+
 //
 
-export type BoardAction = GetTasksListAction | SetTaskStagesListAction;
+export type BoardAction =
+  | GetTasksListAction
+  | SetTaskStagesListAction
+  | CreateTaskAction
+  | SetTaskAction;

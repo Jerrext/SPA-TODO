@@ -5,8 +5,8 @@ import {
   DeleteSingleProjectPayload,
   GetSingleProjectAction,
   Project,
+  ProjectData,
   ProjectList,
-  ProjectPayload,
   ProjectsActionTypes,
   RemoveProjectsFromListAction,
   SetCurrentProjectAction,
@@ -20,30 +20,22 @@ export const getProjectsList = () => ({
   type: ProjectsActionTypes.GET_PROJECTS_LIST,
 });
 
-export const setProjectsList = (
-  payload: ProjectList,
-): SetProjectsListAction => ({
+export const setProjectsList = (payload: ProjectList): SetProjectsListAction => ({
   type: ProjectsActionTypes.SET_PROJECTS_LIST,
   payload,
 });
 
-export const addProjectInList = (
-  payload: Project,
-): AddProjectsInListAction => ({
+export const addProjectInList = (payload: Project): AddProjectsInListAction => ({
   type: ProjectsActionTypes.ADD_PROJECT_IN_LIST,
   payload,
 });
 
-export const removeProjectFromList = (
-  payload: number,
-): RemoveProjectsFromListAction => ({
+export const removeProjectFromList = (payload: number): RemoveProjectsFromListAction => ({
   type: ProjectsActionTypes.REMOVE_PROJECT_FROM_LIST,
   payload,
 });
 
-export const updateProjectsList = (
-  payload: Project,
-): UpdateProjectsListAction => ({
+export const updateProjectsList = (payload: Project): UpdateProjectsListAction => ({
   type: ProjectsActionTypes.UPDATE_PROJECTS_LIST,
   payload,
 });
@@ -53,16 +45,12 @@ export const getSingleProject = (payload: number): GetSingleProjectAction => ({
   payload,
 });
 
-export const setCurrentProject = (
-  payload: Project | null,
-): SetCurrentProjectAction => ({
+export const setCurrentProject = (payload: Project | null): SetCurrentProjectAction => ({
   type: ProjectsActionTypes.SET_CURRENT_PROJECT,
   payload,
 });
 
-export const createSingleProject = (
-  payload: ProjectPayload,
-): CreateSingleProjectAction => ({
+export const createSingleProject = (payload: ProjectData): CreateSingleProjectAction => ({
   type: ProjectsActionTypes.CREATE_SINGLE_PROJECT,
   payload,
 });

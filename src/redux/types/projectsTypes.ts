@@ -24,7 +24,7 @@ export type Project = {
 
 export type ProjectList = Project[];
 
-export type ProjectPayload = {
+export type ProjectData = {
   title: string;
   description: string;
   supervisor: string;
@@ -32,7 +32,7 @@ export type ProjectPayload = {
 
 export type DeleteSingleProjectPayload = PayloadWithCallback<number>;
 
-export type UpdateProjectPayload = PayloadWithId<ProjectPayload>;
+export type UpdateProjectPayload = PayloadWithId<ProjectData>;
 
 //
 
@@ -65,7 +65,7 @@ export type SetProjectsListAction = {
 
 export type CreateSingleProjectAction = {
   type: ProjectsActionTypes.CREATE_SINGLE_PROJECT;
-  payload: ProjectPayload;
+  payload: ProjectData;
 };
 
 export type DeleteSingleProjectAction = {

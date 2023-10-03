@@ -16,6 +16,7 @@ const PageContainer = () => {
   const currentProject = useTypedSelector(ProjectsSelectors.getCurrentProject);
   // const taskStatusOptions = useTypedSelector(TasksSelectors.getTaskStatusOptions);
   const priorityOptions = useTypedSelector(TasksSelectors.getPriorityOptions);
+  const taskNum = useTypedSelector(TasksSelectors.getTaskNum);
 
   const getCurrentWindow = () => {
     switch (modalWindowType) {
@@ -26,11 +27,12 @@ const PageContainer = () => {
       case ModalWindowType.CreateTask:
         return (
           <CreateTaskWindow
-            currentTask={null}
-            // taskStatusOptions={taskStatusOptions}
+            currentProjectId={currentProject?.id}
+            taskNum={taskNum}
             priorityOptions={priorityOptions}
           />
         );
+
       default:
         return;
     }

@@ -41,6 +41,15 @@ export const boardReducer = (
         };
       });
       return { ...state, taskStagesList: formattedList };
+    case BoardActionTypes.SET_TASK:
+      return {
+        ...state,
+        taskStagesList: state.taskStagesList.map((stage) =>
+          stage.statusType === TaskStatusTypes.Queue
+            ? { ...stage, items: [...stage.items, payload] }
+            : stage,
+        ),
+      };
     default:
       return state;
   }
