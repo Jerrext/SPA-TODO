@@ -26,6 +26,7 @@ const initialState: BoardState = {
     { value: `${PriorityTypes.Low}`, label: 'Низкий', color: '#c8ff00fd' },
     { value: `${PriorityTypes.Lowest}`, label: 'Очень низкий', color: '#7bff00' },
   ],
+  currentTask: null,
 };
 
 export const boardReducer = (
@@ -56,6 +57,11 @@ export const boardReducer = (
         taskStagesList: state.taskStagesList.map((stage) => {
           return { ...stage, items: stage.items.filter((task) => task.id !== payload) };
         }),
+      };
+    case BoardActionTypes.SET_CURRENT_TASK:
+      return {
+        ...state,
+        currentTask: payload,
       };
     default:
       return state;

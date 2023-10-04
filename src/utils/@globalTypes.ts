@@ -8,6 +8,7 @@ export enum ModalWindowType {
   CreateProject,
   EditProject,
   CreateTask,
+  TaskInfo,
 }
 
 export enum InputType {
@@ -22,6 +23,7 @@ export type OptionType = {
   value: string;
   label: string;
   color?: string;
+  isDisabled?: boolean;
 };
 
 export type OptionsListType = OptionType[];

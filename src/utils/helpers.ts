@@ -1,3 +1,5 @@
+import { OptionType } from './@globalTypes';
+
 export const setFieldRequiredErrorText = (
   touched: boolean,
   fieldValue: string,
@@ -16,4 +18,8 @@ export const getCurrentDate = () => {
   const now = new Date();
   const newDate = new Intl.DateTimeFormat();
   return newDate.format(now);
+};
+
+export const getNewStatusOptions = (item: OptionType, isTrue: boolean) => {
+  return isTrue ? { ...item, isDisabled: true } : item;
 };

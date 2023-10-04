@@ -16,6 +16,7 @@ type ModalWindowProps = {
   isValid?: boolean;
   cancelTitle?: string;
   cancelHandler?: () => void;
+  classname?: string;
 };
 
 const ModalWindow: FC<ModalWindowProps> = ({
@@ -26,6 +27,7 @@ const ModalWindow: FC<ModalWindowProps> = ({
   isValid,
   cancelHandler,
   cancelTitle,
+  classname,
 }) => {
   const dispatch = useDispatch();
 
@@ -52,7 +54,7 @@ const ModalWindow: FC<ModalWindowProps> = ({
         })}
         onClick={onCancelBtnClick}></div>
       <div
-        className={classNames(styles.window, {
+        className={classNames(styles.window, classname, {
           [styles.showWindow]: visibility,
         })}>
         <h2 className={styles.title}>{title}</h2>

@@ -8,6 +8,7 @@ export enum BoardActionTypes {
   SET_TASK = 'SET_TASK',
   DELETE_TASK = 'DELETE_TASK',
   REMOVE_TASK_FROM_LIST = 'REMOVE_TASK_FROM_LIST',
+  SET_CURRENT_TASK = 'SET_CURRENT_TASK',
 }
 
 //
@@ -28,7 +29,7 @@ export enum PriorityTypes {
 
 //
 
-export type Priority = {
+export type СomputedProperty = {
   [k: number]: string;
 };
 
@@ -44,7 +45,7 @@ export type TaskType = {
   projectId: number;
   num: number;
   order: number;
-  subTasksList: SubtasksList;
+  sub_tasks_list: SubtasksList;
   comments: [];
 };
 
@@ -95,6 +96,7 @@ export type DeleteTaskPayload = PayloadWithId<number>;
 export type BoardState = {
   taskStagesList: Board;
   priorities: OptionsListType;
+  currentTask: TaskType | null;
 };
 
 //
@@ -129,6 +131,11 @@ export type RemoveTaskFromListAction = {
   payload: number;
 };
 
+export type SetCurrentTaskAction = {
+  type: BoardActionTypes.SET_CURRENT_TASK;
+  payload: TaskType;
+};
+
 //
 
 export type BoardAction =
@@ -137,4 +144,5 @@ export type BoardAction =
   | CreateTaskAction
   | SetTaskAction
   | DeleteTaskAction
-  | RemoveTaskFromListAction;
+  | RemoveTaskFromListAction
+  | SetCurrentTaskAction;

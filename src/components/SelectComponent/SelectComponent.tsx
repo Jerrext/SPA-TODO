@@ -93,9 +93,11 @@ const SelectComponent: FC<SelectComponentProps> = ({
               border: errText ? '1px solid #e60000' : '1px solid #1f87ff',
               borderTop: '0',
             }),
-            option: (baseStyles, { data }) => ({
+            option: (baseStyles, { data, isDisabled }) => ({
               ...baseStyles,
-              color: data.color ? data.color : '#ffffff',
+              color: isDisabled ? '#7d8590' : data.color ? data.color : '#ffffff',
+              backgroundColor: isDisabled ? '#1e2229' : '#2a2f38',
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
             }),
             noOptionsMessage: (baseStyles, state) => ({
               ...baseStyles,

@@ -64,10 +64,7 @@
 
   &__option {
     padding: 10px 20px;
-    cursor: pointer !important;
-    // @include h5($color-text-white);
     font-size: 14px !important;
-    background-color: $color-project-hover;
 
     &:hover {
       background-color: $color-project;

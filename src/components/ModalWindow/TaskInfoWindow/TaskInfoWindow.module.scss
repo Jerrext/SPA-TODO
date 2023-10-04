@@ -1,0 +1,95 @@
+@import 'src/assets/mixins';
+
+.row {
+  display: flex;
+  gap: 20px;
+
+  > div {
+    flex: 1;
+  }
+}
+
+.windowWrapper {
+  display: flex;
+  gap: 40px;
+
+  > div:first-child {
+    width: 60%;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  transition: $transition;
+}
+
+.subtaskWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.subtasksBoard {
+  padding: 10px;
+  background-color: $color-project;
+  border-radius: $radius;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+  min-height: 200px;
+}
+
+.subtaskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.subtaskBtn {
+  @include h5($color-text-white);
+  height: 35px;
+  position: absolute;
+  padding: 0 15px;
+  right: 0;
+  top: -32px;
+  width: 180px;
+}
+
+.infoItemTitle {
+  @include h5();
+  margin-bottom: 10px;
+}
+
+.infoItemDescr {
+  border-radius: $radius;
+  border: 1px solid $color-project;
+  padding: 15px 20px;
+}
+
+.highest {
+  color: $color-priority-highest;
+}
+
+.high {
+  color: $color-priority-high;
+}
+
+.medium {
+  color: $color-priority-medium;
+}
+
+.low {
+  color: $color-priority-low;
+}
+
+.lowest {
+  color: $color-priority-lowest;
+}
+
+.taskInfoWindow {
+  max-width: 1400px;
+}

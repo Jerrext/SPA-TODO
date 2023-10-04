@@ -5,7 +5,7 @@ import { InputType } from 'src/utils/@globalTypes';
 
 type InputProps = {
   value: string;
-  title: string;
+  title?: string;
   placeholder: string;
   type: InputType;
   disabled?: boolean;

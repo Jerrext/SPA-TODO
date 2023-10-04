@@ -2,21 +2,22 @@ import React, { FC, useEffect } from 'react';
 import classNames from 'classnames';
 import styles from './Task.module.scss';
 import {
-  Priority,
+  СomputedProperty,
   PriorityTypes,
   TaskStatusTypes,
   TaskType,
 } from 'src/redux/types/boardTypes';
 import Button from '../Button/Button';
-import { ButtonType } from 'src/utils/@globalTypes';
-import { DeleteIcon, EditIcon } from 'src/assets/icons';
+import { ButtonType, ModalWindowType } from 'src/utils/@globalTypes';
+import { ArrowIcon, DeleteIcon, EditIcon, InfoIcon } from 'src/assets/icons';
 import { useDispatch } from 'react-redux';
-import { deleteTask } from 'src/redux/actions/boardActions';
+import { deleteTask, setCurrentTask } from 'src/redux/actions/boardActions';
+import { setModalWindowType } from 'src/redux/actions/pageActions';
 
 type TaskProps = {
   projectId: number;
   task: TaskType;
-  priorities: Priority;
+  priorities: СomputedProperty;
 };
 
 const priorityStyles = {
@@ -27,9 +28,10 @@ const priorityStyles = {
   [PriorityTypes.Lowest]: styles.lowest,
 };
 
-const Task: FC<TaskProps> = ({
-  projectId,
-  task: {
+const Task: FC<TaskProps> = ({ projectId, task, priorities }) => {
+  const dispatch = useDispatch();
+
+  const {
     title,
     // description,
     date_of_creation,
@@ -41,14 +43,13 @@ const Task: FC<TaskProps> = ({
     // projectId,
     num,
     // order,
-  },
-  priorities,
-}) => {
-  const dispatch = useDispatch();
-
+  } = task;
   const priorityClassName = priorityStyles[priority];
 
-  const onEditBtnClick = () => {};
+  const onOpenTaskBtnClick = () => {
+    dispatch(setCurrentTask(task));
+    dispatch(setModalWindowType(ModalWindowType.TaskInfo));
+  };
 
   const onDeleteBtnClick = () => {
     dispatch(deleteTask({ id: projectId, data: id }));
@@ -88,7 +89,11 @@ const Task: FC<TaskProps> = ({
           </div>
         )}
         <div className={styles.bntsWrapper}>
-          <Button title={<EditIcon />} type={ButtonType.SMALL} onClick={onEditBtnClick} />
+          <Button
+            title={<InfoIcon />}
+            type={ButtonType.SMALL}
+            onClick={onOpenTaskBtnClick}
+          />
           <Button
             title={<DeleteIcon />}
             type={ButtonType.SMALL}
