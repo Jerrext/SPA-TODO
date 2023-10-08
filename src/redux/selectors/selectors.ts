@@ -37,7 +37,7 @@ const getTaskStatusOptions = createSelector(
   [(state: RootState) => state.board.taskStagesList],
   (statuses) => {
     return statuses.map((item) => ({
-      value: item.statusType.toString(),
+      value: item.statusType,
       label: item.title,
     }));
   },
@@ -53,14 +53,7 @@ const getTaskNum = createSelector([getTasksStagesList], (stages) => {
 
 const getCurrentTask = (state: RootState) => state.board.currentTask;
 
-const getStatusOptions = createSelector([getTasksStagesList], (stages) => {
-  return stages.map((stage) => ({
-    value: stage.statusType.toString(),
-    label: stage.title,
-  }));
-});
-
-const getStatuses = createSelector([getStatusOptions], (stages) => {
+const getStatuses = createSelector([getTaskStatusOptions], (stages) => {
   return Object.fromEntries(stages.map((stage) => [stage.value, stage.label]));
 });
 
@@ -84,6 +77,5 @@ export const TasksSelectors = {
   getTaskStatusOptions,
   getTaskNum,
   getCurrentTask,
-  getStatusOptions,
   getStatuses,
 };

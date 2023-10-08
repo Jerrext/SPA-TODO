@@ -12,6 +12,8 @@ import {
   SubtaskType,
   TaskType,
   TasksList,
+  UpdateTaskAction,
+  UpdateTaskPayloadWithCallback,
 } from '../types/boardTypes';
 
 export const getTasksList = (payload: number): GetTasksListAction => ({
@@ -46,5 +48,10 @@ export const removeTaskFromList = (payload: number): RemoveTaskFromListAction =>
 
 export const setCurrentTask = (payload: TaskType): SetCurrentTaskAction => ({
   type: BoardActionTypes.SET_CURRENT_TASK,
+  payload,
+});
+
+export const updateTask = (payload: UpdateTaskPayloadWithCallback): UpdateTaskAction => ({
+  type: BoardActionTypes.UPDATE_TASK,
   payload,
 });

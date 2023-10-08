@@ -7,10 +7,17 @@ import {
   SubtaskType,
   TaskType,
   TasksList,
+  UpdateTaskAction,
 } from '../types/boardTypes';
 import API from '../api/index';
 import axios, { AxiosResponse } from 'axios';
-import { removeTaskFromList, setTask, setTaskStagesList } from '../actions/boardActions';
+import {
+  getTasksList,
+  removeTaskFromList,
+  setCurrentTask,
+  setTask,
+  setTaskStagesList,
+} from '../actions/boardActions';
 import { setModalWindowType, toggleIsLoading } from '../actions/pageActions';
 import { LoadingTypes } from '../types/pageTypes';
 
@@ -59,10 +66,33 @@ export function* deleteTaskWorker(action: DeleteTaskAction) {
   }
 }
 
+export function* updateTaskWorker(action: UpdateTaskAction) {
+  const {
+    callback,
+    data: { projectId, taskId, data },
+  } = action.payload;
+  try {
+    const { data: responseData }: AxiosResponse<TaskType> = yield call(
+      API.updateTaskRequest,
+      projectId,
+      taskId,
+      data,
+    );
+    yield put(setCurrentTask(responseData));
+    yield put(getTasksList(projectId));
+    callback && callback();
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.warn(error.message);
+    }
+  }
+}
+
 export default function* boardSaga() {
   yield all([
     takeLatest(BoardActionTypes.GET_TASKS_LIST, getTasksListWorker),
     takeLatest(BoardActionTypes.CREATE_TASK, createTaskWorker),
     takeLatest(BoardActionTypes.DELETE_TASK, deleteTaskWorker),
+    takeLatest(BoardActionTypes.UPDATE_TASK, updateTaskWorker),
   ]);
 }

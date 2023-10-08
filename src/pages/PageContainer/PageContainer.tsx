@@ -19,7 +19,7 @@ const PageContainer = () => {
   const priorityOptions = useTypedSelector(TasksSelectors.getPriorityOptions);
   const taskNum = useTypedSelector(TasksSelectors.getTaskNum);
   const curretnTask = useTypedSelector(TasksSelectors.getCurrentTask);
-  const statusOptions = useTypedSelector(TasksSelectors.getStatusOptions);
+  const statusOptions = useTypedSelector(TasksSelectors.getTaskStatusOptions);
   const priorities = useTypedSelector(TasksSelectors.getPriorities);
   const statuses = useTypedSelector(TasksSelectors.getStatuses);
 

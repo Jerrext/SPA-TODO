@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ProjectData } from '../types/projectsTypes';
-import { CreateTaskData, CreateTaskPayload } from '../types/boardTypes';
+import { CreateTaskData, CreateTaskPayload, UpdateTaskData } from '../types/boardTypes';
 
 const FIRST_API_URL = 'https://65123aeab8c6ce52b3956e61.mockapi.io';
 const SECOND_API_URL = '';
@@ -45,6 +45,10 @@ const deleteTaskRequest = (projectId: number, taskId: number) => {
   return firstApiAxios.delete(`/projects/${projectId}/tasks/${taskId}`);
 };
 
+const updateTaskRequest = (projectId: number, taskId: number, data: UpdateTaskData) => {
+  return firstApiAxios.put(`/projects/${projectId}/tasks/${taskId}`, data);
+};
+
 export default {
   getProjectsRequest,
   createSingleProjectRequest,
@@ -54,4 +58,5 @@ export default {
   getTasksListRequest,
   createTaskRequest,
   deleteTaskRequest,
+  updateTaskRequest,
 };

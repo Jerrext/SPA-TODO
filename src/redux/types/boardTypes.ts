@@ -1,5 +1,5 @@
 import { OptionsListType } from 'src/utils/@globalTypes';
-import { PayloadWithId } from './@types';
+import { PayloadWithCallback, PayloadWithId } from './@types';
 
 export enum BoardActionTypes {
   GET_TASKS_LIST = 'GET_TASKS_LIST',
@@ -9,28 +9,30 @@ export enum BoardActionTypes {
   DELETE_TASK = 'DELETE_TASK',
   REMOVE_TASK_FROM_LIST = 'REMOVE_TASK_FROM_LIST',
   SET_CURRENT_TASK = 'SET_CURRENT_TASK',
+  UPDATE_TASK = 'UPDATE_TASK',
+  UPDATE_TASK_IN_LIST = 'UPDATE_TASK_IN_LIST',
 }
 
 //
 
 export enum TaskStatusTypes {
-  Queue,
-  Development,
-  Done,
+  Queue = 'queue',
+  Development = 'development',
+  Done = 'done',
 }
 
 export enum PriorityTypes {
-  Highest,
-  High,
-  Medium,
-  Low,
-  Lowest,
+  Highest = 'highest',
+  High = 'high',
+  Medium = 'medium',
+  Low = 'low',
+  Lowest = 'lowest',
 }
 
 //
 
 export type СomputedProperty = {
-  [k: number]: string;
+  [k: string]: string;
 };
 
 export type TaskType = {
@@ -88,8 +90,28 @@ export type CreateTaskData = {
   order: number;
 };
 
+export type UpdateTaskData = {
+  title?: string;
+  description?: string;
+  end_date?: string;
+  priority?: PriorityTypes;
+  status?: TaskStatusTypes;
+  start_date?: string;
+  order?: number;
+  sub_tasks_list?: SubtasksList;
+  comments?: [];
+};
+
+type UpdateTaskPayload = {
+  taskId: number;
+  projectId: number;
+  data: UpdateTaskData;
+};
+
 export type CreateTaskPayload = PayloadWithId<CreateTaskData>;
 export type DeleteTaskPayload = PayloadWithId<number>;
+
+export type UpdateTaskPayloadWithCallback = PayloadWithCallback<UpdateTaskPayload>;
 
 //
 
@@ -136,6 +158,11 @@ export type SetCurrentTaskAction = {
   payload: TaskType;
 };
 
+export type UpdateTaskAction = {
+  type: BoardActionTypes.UPDATE_TASK;
+  payload: UpdateTaskPayloadWithCallback;
+};
+
 //
 
 export type BoardAction =
@@ -145,4 +172,5 @@ export type BoardAction =
   | SetTaskAction
   | DeleteTaskAction
   | RemoveTaskFromListAction
-  | SetCurrentTaskAction;
+  | SetCurrentTaskAction
+  | UpdateTaskAction;

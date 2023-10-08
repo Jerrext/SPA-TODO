@@ -40,7 +40,7 @@ const CreateTaskWindow: FC<CreateTaskWindowProps> = ({
           data: {
             title,
             description,
-            priority: +priority as PriorityTypes,
+            priority: priority as PriorityTypes,
             date_of_creation: getCurrentDate(),
             end_date: '—',
             start_date: '—',

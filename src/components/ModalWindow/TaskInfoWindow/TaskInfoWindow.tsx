@@ -8,7 +8,11 @@ import {
   OptionType,
   OptionsListType,
 } from 'src/utils/@globalTypes';
-import { getNewStatusOptions, setFieldRequiredErrorText } from 'src/utils/helpers';
+import {
+  getCurrentDate,
+  getNewStatusOptions,
+  setFieldRequiredErrorText,
+} from 'src/utils/helpers';
 import { useDispatch } from 'react-redux';
 import {
   СomputedProperty,
@@ -21,6 +25,7 @@ import SelectComponent from 'src/components/SelectComponent/SelectComponent';
 import Button from 'src/components/Button/Button';
 import EmptyState from 'src/components/EmptyState/EmptyState';
 import classNames from 'classnames';
+import { updateTask } from 'src/redux/actions/boardActions';
 
 type TaskInfoWindowProps = {
   currentTask: TaskType | null;
@@ -107,19 +112,113 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   const isTaskInfoPage = modalWindowPage === PageType.TaskInfo;
   const isCreateSubtaskPage = modalWindowPage === PageType.CreateSubtask;
 
+  // TASK CONSTANTS
+
+  const isTitleChanged = title !== currentTask?.title;
+  const isDescriptionChanged = description !== currentTask?.description;
+  const isTaskStatusChanged = taskStatus !== currentTask?.status;
+  const isPriorityChanged = priority !== currentTask?.priority;
+  const isSubtasksListChanged =
+    JSON.stringify(subtasksList) !== JSON.stringify(currentTask?.sub_tasks_list);
+
+  // TASK HANDLERS
+
+  const setTaskFieldsValue = () => {
+    if (currentTask) {
+      setTitle(currentTask.title);
+      setDescription(currentTask.description);
+      setPriority(currentTask.priority);
+      setTaskStatus(currentTask.status);
+
+      setSubtaskList(currentTask.sub_tasks_list);
+
+      switch (currentTask.status) {
+        case TaskStatusTypes.Queue:
+          setNewStatusOptions(
+            statusOptions.map((item) =>
+              getNewStatusOptions(item, item.value === TaskStatusTypes.Done),
+            ),
+          );
+          break;
+        case TaskStatusTypes.Development:
+          setNewStatusOptions(
+            statusOptions.map((item) =>
+              getNewStatusOptions(item, item.value === TaskStatusTypes.Queue),
+            ),
+          );
+          break;
+        case TaskStatusTypes.Done:
+          setNewStatusOptions(
+            statusOptions.map((item) =>
+              getNewStatusOptions(item, item.value !== TaskStatusTypes.Done),
+            ),
+          );
+          break;
+        default:
+          setNewStatusOptions(currentTask.status);
+      }
+    }
+  };
+
+  const cancelTaskEditingHandler = () => {
+    setIsTaskEditing(false);
+    setTitleError('');
+    currentTask && setSubtaskList(currentTask.sub_tasks_list);
+  };
+
+  const onSaveTaskBtnClick = () => {
+    if (currentTask) {
+      dispatch(
+        updateTask({
+          data: {
+            taskId: currentTask.id,
+            projectId: currentTask.projectId,
+            data: {
+              title: isTitleChanged ? title : undefined,
+              description: isDescriptionChanged ? description : undefined,
+              end_date:
+                taskStatus === TaskStatusTypes.Done ? getCurrentDate() : undefined,
+              priority: isPriorityChanged ? (priority as PriorityTypes) : undefined,
+              status: isTaskStatusChanged ? (taskStatus as TaskStatusTypes) : undefined,
+              start_date:
+                taskStatus === TaskStatusTypes.Development ? getCurrentDate() : undefined,
+              order: undefined,
+              sub_tasks_list: isSubtasksListChanged ? subtasksList : undefined,
+            },
+          },
+          callback: () => setIsTaskEditing(false),
+        }),
+      );
+    }
+  };
+
   const onEditTaskBtnClick = () => {
     setIsTaskEditing(true);
+    setTaskFieldsValue();
+  };
+
+  // SUBTASK HANDLERS
+
+  const clearSubtaskFormHandler = () => {
+    setModalWindowPage(PageType.TaskInfo);
+    setsubtaskTitle('');
+    setSubtaskDescription('');
+    setSubtaskPriority('');
+
+    setSubtaskTitleError('');
+    setSubtaskPriorityError('');
+
+    setSubtaskTitleTouched(false);
+    setSubtaskPriorityTouched(false);
   };
 
   const onCreateSubTaskBtnClick = () => {
     setModalWindowPage(PageType.CreateSubtask);
   };
 
-  const onSaveTaskBtnClick = () => {};
-
   const onSaveSubtaskBtnClick = () => {
-    // if (currentTask) {
     setModalWindowPage(PageType.TaskInfo);
+    clearSubtaskFormHandler();
     setSubtaskList((list: any) => {
       return [
         ...list,
@@ -137,31 +236,12 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
           order: 0,
         },
       ];
-      // list.push();
     });
-    // }
   };
 
   // useEffect(() => {
-  //   console.log(subtasksList);
+  //   console.log();
   // }, [subtasksList]);
-
-  const cancelTaskEditingHandler = () => {
-    setIsTaskEditing(false);
-  };
-
-  const clearSubtaskFormHandler = () => {
-    setModalWindowPage(PageType.TaskInfo);
-    setsubtaskTitle('');
-    setSubtaskDescription('');
-    setSubtaskPriority('');
-
-    setSubtaskTitleError('');
-    setSubtaskPriorityError('');
-
-    setSubtaskTitleTouched(false);
-    setSubtaskPriorityTouched(false);
-  };
 
   // const onSaveBtnClick = () => {};
 
@@ -175,42 +255,33 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   //   }
   // }, [currentTask]);
 
+  // useEffect(() => {}, [currentTask]);
+
   useEffect(() => {
+    setTaskFieldsValue();
+  }, []);
+
+  //TASK VALIDATION
+
+  useEffect(() => {
+    setFieldRequiredErrorText(titleTouched, title, setTitleError);
+  }, [title, titleTouched]);
+
+  const isTaskEditingValid = useMemo(() => {
+    return titleError.length === 0 && title.length > 0;
+  }, [titleError, title]);
+
+  const isTaskFieldsChanged = useMemo(() => {
     if (currentTask) {
-      setTitle(currentTask.title);
-      setDescription(currentTask.description);
-      setPriority(currentTask.priority.toString());
-      setTaskStatus(currentTask.status.toString());
-
-      setSubtaskList(currentTask.sub_tasks_list);
-
-      switch (currentTask.status) {
-        case TaskStatusTypes.Queue:
-          setNewStatusOptions(
-            statusOptions.map((item) =>
-              getNewStatusOptions(item, +item.value === TaskStatusTypes.Done),
-            ),
-          );
-          break;
-        case TaskStatusTypes.Development:
-          setNewStatusOptions(
-            statusOptions.map((item) =>
-              getNewStatusOptions(item, +item.value === TaskStatusTypes.Queue),
-            ),
-          );
-          break;
-        case TaskStatusTypes.Done:
-          setNewStatusOptions(
-            statusOptions.map((item) =>
-              getNewStatusOptions(item, +item.value !== TaskStatusTypes.Done),
-            ),
-          );
-          break;
-        default:
-          setNewStatusOptions(currentTask.status);
-      }
+      return (
+        isTitleChanged ||
+        isDescriptionChanged ||
+        isTaskStatusChanged ||
+        isPriorityChanged ||
+        isSubtasksListChanged
+      );
     }
-  }, [currentTask]);
+  }, [currentTask, title, description, taskStatus, priority, subtasksList]);
 
   //SUBTASK VALIDATION
 
@@ -236,7 +307,7 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   //   }
   // }, [currentTask, title, description, priority]);
 
-  const isValid = useMemo(() => {
+  const isSubtaskValid = useMemo(() => {
     return (
       subtaskTitleError.length === 0 &&
       subtaskPriorityError.length === 0 &&
@@ -248,7 +319,7 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   return (
     <ModalWindow
       title={isCreateSubtaskPage ? 'Создание подзадачи' : `Задача ${currentTask?.num}`}
-      btnTitle={isTaskInfoPage ? 'Редактировать' : 'Сохранить'}
+      btnTitle={isTaskInfoPage && !isTaskEditing ? 'Редактировать' : 'Сохранить'}
       onSubmit={
         isTaskInfoPage && !isTaskEditing
           ? onEditTaskBtnClick
@@ -256,7 +327,13 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
           ? onSaveTaskBtnClick
           : onSaveSubtaskBtnClick
       }
-      isValid={isValid}
+      isValid={
+        isCreateSubtaskPage
+          ? !isSubtaskValid
+          : isTaskInfoPage && isTaskEditing
+          ? !isTaskEditingValid || !isTaskFieldsChanged
+          : undefined
+      }
       cancelHandler={
         isCreateSubtaskPage
           ? clearSubtaskFormHandler
