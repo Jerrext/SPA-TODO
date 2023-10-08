@@ -20,12 +20,15 @@ import {
   TaskStatusTypes,
   TaskType,
   PriorityTypes,
+  SubtaskType,
 } from 'src/redux/types/boardTypes';
 import SelectComponent from 'src/components/SelectComponent/SelectComponent';
 import Button from 'src/components/Button/Button';
 import EmptyState from 'src/components/EmptyState/EmptyState';
 import classNames from 'classnames';
-import { updateTask } from 'src/redux/actions/boardActions';
+import { deleteTask, updateTask } from 'src/redux/actions/boardActions';
+import Task from 'src/components/Task/Task';
+import { setModalWindowType } from 'src/redux/actions/pageActions';
 
 type TaskInfoWindowProps = {
   currentTask: TaskType | null;
@@ -197,7 +200,22 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
     setTaskFieldsValue();
   };
 
+  const onDeleteTaskBtnClick = () => {
+    if (currentTask) {
+      dispatch(
+        deleteTask({
+          data: { projectId: currentTask.projectId, taskId: currentTask.id },
+          callback: () => dispatch(setModalWindowType(null)),
+        }),
+      );
+    }
+  };
+
   // SUBTASK HANDLERS
+
+  const onOpenSubtaskBtnClick = () => {};
+
+  const onDeleteSubtaskBtnClick = () => {};
 
   const clearSubtaskFormHandler = () => {
     setModalWindowPage(PageType.TaskInfo);
@@ -219,22 +237,24 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   const onSaveSubtaskBtnClick = () => {
     setModalWindowPage(PageType.TaskInfo);
     clearSubtaskFormHandler();
-    setSubtaskList((list: any) => {
+    setSubtaskList((list: SubtasksList) => {
+      const subtaskId = list.map((item) => item.id);
+      const subtaskNumbers = list.map((item) => item.num);
       return [
         ...list,
         {
           title: subtaskTitle,
           description: subtaskDescription,
-          date_of_creation: '',
-          end_date: '',
+          date_of_creation: getCurrentDate(),
+          end_date: '—',
           priority: subtaskPriority,
           status: TaskStatusTypes.Queue,
-          start_date: '',
-          parentTaskId: 3,
-          id: 0,
-          num: 0,
+          start_date: '—',
+          parentTaskId: currentTask?.id,
+          id: list.length > 0 ? Math.max(...subtaskId) + 1 : 0,
+          num: list.length > 0 ? Math.max(...subtaskNumbers) + 1 : 1,
           order: 0,
-        },
+        } as SubtaskType,
       ];
     });
   };
@@ -342,6 +362,7 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
           : undefined
       }
       cancelTitle={isTaskInfoPage && !isTaskEditing ? 'Закрыть' : 'Отмена'}
+      onDelete={isTaskInfoPage ? onDeleteTaskBtnClick : undefined}
       classname={isTaskInfoPage ? styles.taskInfoWindow : undefined}>
       {isTaskInfoPage && currentTask && (
         <div className={styles.windowWrapper}>
@@ -437,7 +458,15 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
             <div className={styles.subtasksBoard}>
               {subtasksList.length > 0 ? (
                 subtasksList.map((item: any) => {
-                  return <div key={item.num}>{item.num}</div>;
+                  return (
+                    <Task
+                      key={item.id}
+                      task={item}
+                      priorities={priorities}
+                      onDeleteBtnClick={onDeleteSubtaskBtnClick}
+                      onOpenBtnClick={onOpenSubtaskBtnClick}
+                    />
+                  );
                 })
               ) : (
                 <EmptyState

@@ -15,15 +15,10 @@ const btnStyles = {
   [ButtonType.PRIMARY]: styles.primaryBtn,
   [ButtonType.SECONDARY]: styles.secondaryBtn,
   [ButtonType.SMALL]: styles.small,
+  [ButtonType.DELETE]: styles.delete,
 };
 
-const Button: FC<ButtonProps> = ({
-  title,
-  onClick,
-  type,
-  disabled,
-  className,
-}) => {
+const Button: FC<ButtonProps> = ({ title, onClick, type, disabled, className }) => {
   const btnClassName = btnStyles[type];
 
   return (

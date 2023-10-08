@@ -17,6 +17,7 @@ type ModalWindowProps = {
   cancelTitle?: string;
   cancelHandler?: () => void;
   classname?: string;
+  onDelete?: () => void;
 };
 
 const ModalWindow: FC<ModalWindowProps> = ({
@@ -28,6 +29,7 @@ const ModalWindow: FC<ModalWindowProps> = ({
   cancelHandler,
   cancelTitle,
   classname,
+  onDelete,
 }) => {
   const dispatch = useDispatch();
 
@@ -67,6 +69,9 @@ const ModalWindow: FC<ModalWindowProps> = ({
               onClick={onSubmit}
               disabled={isValid}
             />
+          )}
+          {onDelete && (
+            <Button title={'Удалить'} type={ButtonType.DELETE} onClick={onDelete} />
           )}
           <Button
             title={cancelTitle ? cancelTitle : 'Отмена'}

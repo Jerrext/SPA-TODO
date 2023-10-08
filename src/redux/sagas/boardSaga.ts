@@ -55,10 +55,14 @@ export function* createTaskWorker(action: CreateTaskAction) {
 }
 
 export function* deleteTaskWorker(action: DeleteTaskAction) {
-  const { id, data } = action.payload;
+  const {
+    data: { projectId, taskId },
+    callback,
+  } = action.payload;
   try {
-    yield call(API.deleteTaskRequest, id, data);
-    yield put(removeTaskFromList(data));
+    yield call(API.deleteTaskRequest, projectId, taskId);
+    yield put(removeTaskFromList(taskId));
+    callback && callback();
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);

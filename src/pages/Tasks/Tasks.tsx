@@ -17,8 +17,8 @@ import { setModalWindowType } from 'src/redux/actions/pageActions';
 import Input from 'src/components/Input';
 import EmptyState from 'src/components/EmptyState';
 import Loader from 'src/components/Loader';
-import { TaskStatusTypes } from 'src/redux/types/boardTypes';
-import { getTasksList } from 'src/redux/actions/boardActions';
+import { TaskStatusTypes, TaskType } from 'src/redux/types/boardTypes';
+import { deleteTask, getTasksList, setCurrentTask } from 'src/redux/actions/boardActions';
 import {
   PageSelectors,
   ProjectsSelectors,
@@ -63,6 +63,17 @@ const Tasks = () => {
         }),
       );
   };
+
+  const onOpenTaskBtnClick = (task: TaskType) => () => {
+    dispatch(setCurrentTask(task));
+    dispatch(setModalWindowType(ModalWindowType.TaskInfo));
+  };
+
+  const onDeleteTaskBtnClick = (projectId: number, taskId: number) => () => {
+    dispatch(deleteTask({ data: { projectId, taskId } }));
+  };
+
+  //
 
   useEffect(() => {
     if (projectId) {
@@ -144,9 +155,10 @@ const Tasks = () => {
                           return (
                             <Task
                               key={task.id}
-                              projectId={+projectId}
                               task={task}
                               priorities={priorities}
+                              onOpenBtnClick={onOpenTaskBtnClick(task)}
+                              onDeleteBtnClick={onDeleteTaskBtnClick(+projectId, task.id)}
                             />
                           );
                         })

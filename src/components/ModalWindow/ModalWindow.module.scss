@@ -28,7 +28,9 @@
   border-radius: $radius;
   padding: 50px;
   position: relative;
-  transition: $transition;
+  transition:
+    opacity $transition,
+    transform $transition;
   transform: translateY(40px);
   max-width: 800px;
   width: 100%;

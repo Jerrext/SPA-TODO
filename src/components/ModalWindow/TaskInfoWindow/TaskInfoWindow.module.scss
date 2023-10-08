@@ -33,13 +33,13 @@
 
 .subtasksBoard {
   padding: 10px;
-  background-color: $color-project;
   border-radius: $radius;
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: 10px;
   min-height: 200px;
+  border: 1px solid $color-project;
 }
 
 .subtaskHeader {
@@ -47,16 +47,16 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-}
 
-.subtaskBtn {
-  @include h5($color-text-white);
-  height: 35px;
-  position: absolute;
-  padding: 0 15px;
-  right: 0;
-  top: -32px;
-  width: 180px;
+  .subtaskBtn {
+    @include h5($color-text-white);
+    height: 35px;
+    position: absolute;
+    padding: 0 15px;
+    right: 0;
+    top: -35px;
+    width: 180px;
+  }
 }
 
 .infoItemTitle {

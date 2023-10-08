@@ -67,7 +67,7 @@ export type SubtaskType = {
   order: number;
 };
 
-export type SubtasksList = TaskType[];
+export type SubtasksList = SubtaskType[];
 
 type TaskStatus = {
   id: number;
@@ -109,7 +109,10 @@ type UpdateTaskPayload = {
 };
 
 export type CreateTaskPayload = PayloadWithId<CreateTaskData>;
-export type DeleteTaskPayload = PayloadWithId<number>;
+export type DeleteTaskPayload = PayloadWithCallback<{
+  projectId: number;
+  taskId: number;
+}>;
 
 export type UpdateTaskPayloadWithCallback = PayloadWithCallback<UpdateTaskPayload>;
 

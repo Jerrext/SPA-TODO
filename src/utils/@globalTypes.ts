@@ -2,6 +2,7 @@ export enum ButtonType {
   PRIMARY,
   SECONDARY,
   SMALL,
+  DELETE,
 }
 
 export enum ModalWindowType {
