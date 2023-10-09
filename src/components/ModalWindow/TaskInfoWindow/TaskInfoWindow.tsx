@@ -63,7 +63,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   const dispatch = useDispatch();
 
   const [modalWindowPage, setModalWindowPage] = useState(PageType.TaskInfo);
-  const [subtasksList, setSubtaskList] = useState<SubtasksList>([]);
   const [newStatusOptions, setNewStatusOptions] = useState<OptionsListType>();
   const [isTaskEditing, setIsTaskEditing] = useState(false);
 
@@ -82,34 +81,16 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
 
   const [subtaskTitle, setsubtaskTitle] = useState('');
   const [subtaskDescription, setSubtaskDescription] = useState('');
-  // const [status, setStatus] = useState('');
   const [subtaskPriority, setSubtaskPriority] = useState('');
 
   const [subtaskTitleError, setSubtaskTitleError] = useState('');
-  // const [statusError, setStatusError] = useState('');
   const [subtaskPriorityError, setSubtaskPriorityError] = useState('');
 
   const [subtaskTitleTouched, setSubtaskTitleTouched] = useState(false);
-  // const [statusTouched, setStatusTouched] = useState(false);
   const [subtaskPriorityTouched, setSubtaskPriorityTouched] = useState(false);
 
   //
 
-  // const {
-  //   title:,
-  //   description,
-  //   date_of_creation,
-  //   end_date,
-  //   priority,
-  //   status,
-  //   start_date,
-  //   id,
-  //   projectId,
-  //   num,
-  //   order,
-  //   sub_tasks_list,
-  //   comments,
-  // } = currentTask;
   const priorityClassName = currentTask ? priorityStyles[currentTask.priority] : '';
 
   const isTaskInfoPage = modalWindowPage === PageType.TaskInfo;
@@ -121,8 +102,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   const isDescriptionChanged = description !== currentTask?.description;
   const isTaskStatusChanged = taskStatus !== currentTask?.status;
   const isPriorityChanged = priority !== currentTask?.priority;
-  const isSubtasksListChanged =
-    JSON.stringify(subtasksList) !== JSON.stringify(currentTask?.sub_tasks_list);
 
   // TASK HANDLERS
 
@@ -132,8 +111,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
       setDescription(currentTask.description);
       setPriority(currentTask.priority);
       setTaskStatus(currentTask.status);
-
-      setSubtaskList(currentTask.sub_tasks_list);
 
       switch (currentTask.status) {
         case TaskStatusTypes.Queue:
@@ -166,7 +143,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   const cancelTaskEditingHandler = () => {
     setIsTaskEditing(false);
     setTitleError('');
-    currentTask && setSubtaskList(currentTask.sub_tasks_list);
   };
 
   const onSaveTaskBtnClick = () => {
@@ -186,7 +162,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
               start_date:
                 taskStatus === TaskStatusTypes.Development ? getCurrentDate() : undefined,
               order: undefined,
-              sub_tasks_list: isSubtasksListChanged ? subtasksList : undefined,
             },
           },
           callback: () => setIsTaskEditing(false),
@@ -215,7 +190,24 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
 
   const onOpenSubtaskBtnClick = () => {};
 
-  const onDeleteSubtaskBtnClick = () => {};
+  const onDeleteSubtaskBtnClick = (deletedSubtaskId: number) => () => {
+    if (currentTask) {
+      const { id, projectId, sub_tasks_list } = currentTask;
+      dispatch(
+        updateTask({
+          data: {
+            taskId: id,
+            projectId: projectId,
+            data: {
+              sub_tasks_list: sub_tasks_list.filter(
+                (subtask) => subtask.id !== deletedSubtaskId,
+              ),
+            },
+          },
+        }),
+      );
+    }
+  };
 
   const clearSubtaskFormHandler = () => {
     setModalWindowPage(PageType.TaskInfo);
@@ -235,28 +227,42 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   };
 
   const onSaveSubtaskBtnClick = () => {
-    setModalWindowPage(PageType.TaskInfo);
-    clearSubtaskFormHandler();
-    setSubtaskList((list: SubtasksList) => {
-      const subtaskId = list.map((item) => item.id);
-      const subtaskNumbers = list.map((item) => item.num);
-      return [
-        ...list,
-        {
-          title: subtaskTitle,
-          description: subtaskDescription,
-          date_of_creation: getCurrentDate(),
-          end_date: '—',
-          priority: subtaskPriority,
-          status: TaskStatusTypes.Queue,
-          start_date: '—',
-          parentTaskId: currentTask?.id,
-          id: list.length > 0 ? Math.max(...subtaskId) + 1 : 0,
-          num: list.length > 0 ? Math.max(...subtaskNumbers) + 1 : 1,
-          order: 0,
-        } as SubtaskType,
-      ];
-    });
+    if (currentTask) {
+      const { id, projectId, sub_tasks_list } = currentTask;
+      const subtaskId = sub_tasks_list.map((item) => item.id);
+      const subtaskNumbers = sub_tasks_list.map((item) => item.num);
+
+      dispatch(
+        updateTask({
+          data: {
+            taskId: id,
+            projectId: projectId,
+            data: {
+              sub_tasks_list: [
+                ...sub_tasks_list,
+                {
+                  title: subtaskTitle,
+                  description: subtaskDescription,
+                  date_of_creation: getCurrentDate(),
+                  end_date: '—',
+                  priority: subtaskPriority as PriorityTypes,
+                  status: TaskStatusTypes.Queue,
+                  start_date: '—',
+                  parentTaskId: currentTask?.id,
+                  id: sub_tasks_list.length > 0 ? Math.max(...subtaskId) + 1 : 0,
+                  num: sub_tasks_list.length > 0 ? Math.max(...subtaskNumbers) + 1 : 1,
+                  order: 0,
+                },
+              ],
+            },
+          },
+          callback: () => {
+            setModalWindowPage(PageType.TaskInfo);
+            clearSubtaskFormHandler();
+          },
+        }),
+      );
+    }
   };
 
   // useEffect(() => {
@@ -294,14 +300,10 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   const isTaskFieldsChanged = useMemo(() => {
     if (currentTask) {
       return (
-        isTitleChanged ||
-        isDescriptionChanged ||
-        isTaskStatusChanged ||
-        isPriorityChanged ||
-        isSubtasksListChanged
+        isTitleChanged || isDescriptionChanged || isTaskStatusChanged || isPriorityChanged
       );
     }
-  }, [currentTask, title, description, taskStatus, priority, subtasksList]);
+  }, [currentTask, title, description, taskStatus, priority]);
 
   //SUBTASK VALIDATION
 
@@ -446,24 +448,22 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
           <div className={styles.subtaskWrapper}>
             <div className={styles.subtaskHeader}>
               <p className={styles.infoItemTitle}>Подзадачи:</p>
-              {isTaskEditing && (
-                <Button
-                  title="Создать подзадачу"
-                  type={ButtonType.PRIMARY}
-                  className={styles.subtaskBtn}
-                  onClick={onCreateSubTaskBtnClick}
-                />
-              )}
+              <Button
+                title="Создать подзадачу"
+                type={ButtonType.PRIMARY}
+                className={styles.subtaskBtn}
+                onClick={onCreateSubTaskBtnClick}
+              />
             </div>
             <div className={styles.subtasksBoard}>
-              {subtasksList.length > 0 ? (
-                subtasksList.map((item: any) => {
+              {currentTask.sub_tasks_list.length > 0 ? (
+                currentTask.sub_tasks_list.map((item: any) => {
                   return (
                     <Task
                       key={item.id}
                       task={item}
                       priorities={priorities}
-                      onDeleteBtnClick={onDeleteSubtaskBtnClick}
+                      onDeleteBtnClick={onDeleteSubtaskBtnClick(item.id)}
                       onOpenBtnClick={onOpenSubtaskBtnClick}
                     />
                   );

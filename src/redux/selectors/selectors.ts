@@ -53,14 +53,6 @@ const getTaskNum = createSelector([getTasksStagesList], (stages) => {
 
 const getCurrentTask = (state: RootState) => state.board.currentTask;
 
-// const getSubtaskNum = createSelector([getCurrentTask], (task) => {
-//   const subtasksNumbers: number[] = [];
-//   task?.sub_tasks_list.forEach((subtask) => {
-//     subtasksNumbers.push(subtask.num);
-//   });
-//   return subtasksNumbers.length > 0 ? Math.max(...subtasksNumbers) + 1 : 1;
-// });
-
 const getStatuses = createSelector([getTaskStatusOptions], (stages) => {
   return Object.fromEntries(stages.map((stage) => [stage.value, stage.label]));
 });
