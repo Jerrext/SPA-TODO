@@ -11,6 +11,7 @@ import {
 } from 'src/redux/selectors/selectors';
 import CreateTaskWindow from 'src/components/ModalWindow/CreateTaskWindow/CreateTaskWindow';
 import TaskInfoWindow from 'src/components/ModalWindow/TaskInfoWindow/TaskInfoWindow';
+import SubtaskInfoWindow from 'src/components/ModalWindow/SubtaskInfoWindow/SubtaskInfoWindow';
 
 const PageContainer = () => {
   const modalWindowType = useTypedSelector(PageSelectors.getModalWindowType);
@@ -19,6 +20,7 @@ const PageContainer = () => {
   const priorityOptions = useTypedSelector(TasksSelectors.getPriorityOptions);
   const taskNum = useTypedSelector(TasksSelectors.getTaskNum);
   const curretnTask = useTypedSelector(TasksSelectors.getCurrentTask);
+  const currentSubtask = useTypedSelector(TasksSelectors.getCurrentSubtask);
   const statusOptions = useTypedSelector(TasksSelectors.getTaskStatusOptions);
   const priorities = useTypedSelector(TasksSelectors.getPriorities);
   const statuses = useTypedSelector(TasksSelectors.getStatuses);
@@ -43,6 +45,16 @@ const PageContainer = () => {
             priorities={priorities}
             statusOptions={statusOptions}
             currentTask={curretnTask}
+            priorityOptions={priorityOptions}
+            statuses={statuses}
+          />
+        );
+      case ModalWindowType.SubtaskInfo:
+        return (
+          <SubtaskInfoWindow
+            priorities={priorities}
+            statusOptions={statusOptions}
+            currentSubtask={currentSubtask}
             priorityOptions={priorityOptions}
             statuses={statuses}
           />

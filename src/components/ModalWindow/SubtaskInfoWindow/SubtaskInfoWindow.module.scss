@@ -1,0 +1,23 @@
+@import 'src/assets/mixins';
+
+.row {
+  display: flex;
+  gap: 20px;
+
+  > div {
+    flex: 1;
+  }
+}
+
+.windowWrapper {
+  display: flex;
+  gap: 40px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  transition: $transition;
+}

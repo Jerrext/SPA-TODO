@@ -11,6 +11,7 @@ export enum BoardActionTypes {
   SET_CURRENT_TASK = 'SET_CURRENT_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
   UPDATE_TASK_IN_LIST = 'UPDATE_TASK_IN_LIST',
+  SET_CURRENT_SUBTASK = 'SET_CURRENT_SUBTASK',
 }
 
 //
@@ -122,6 +123,7 @@ export type BoardState = {
   taskStagesList: Board;
   priorities: OptionsListType;
   currentTask: TaskType | null;
+  currentSubtask: SubtaskType | null;
 };
 
 //
@@ -166,6 +168,11 @@ export type UpdateTaskAction = {
   payload: UpdateTaskPayloadWithCallback;
 };
 
+export type SetCurrentSubtaskAction = {
+  type: BoardActionTypes.SET_CURRENT_SUBTASK;
+  payload: SubtaskType | null;
+};
+
 //
 
 export type BoardAction =
@@ -176,4 +183,5 @@ export type BoardAction =
   | DeleteTaskAction
   | RemoveTaskFromListAction
   | SetCurrentTaskAction
-  | UpdateTaskAction;
+  | UpdateTaskAction
+  | SetCurrentSubtaskAction;

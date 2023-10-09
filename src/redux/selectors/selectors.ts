@@ -57,6 +57,8 @@ const getStatuses = createSelector([getTaskStatusOptions], (stages) => {
   return Object.fromEntries(stages.map((stage) => [stage.value, stage.label]));
 });
 
+const getCurrentSubtask = (state: RootState) => state.board.currentSubtask;
+
 //
 
 export const PageSelectors = {
@@ -78,4 +80,5 @@ export const TasksSelectors = {
   getTaskNum,
   getCurrentTask,
   getStatuses,
+  getCurrentSubtask,
 };

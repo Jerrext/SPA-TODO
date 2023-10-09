@@ -11,6 +11,7 @@ import {
 import Button from '../Button/Button';
 import { ButtonType } from 'src/utils/@globalTypes';
 import { DeleteIcon, InfoIcon } from 'src/assets/icons';
+import InfoItem from '../InfoItem/InfoItem';
 
 type TaskProps = {
   task: TaskType | SubtaskType;
@@ -19,17 +20,7 @@ type TaskProps = {
   onDeleteBtnClick?: () => void;
 };
 
-const priorityStyles = {
-  [PriorityTypes.Highest]: styles.highest,
-  [PriorityTypes.High]: styles.high,
-  [PriorityTypes.Medium]: styles.medium,
-  [PriorityTypes.Low]: styles.low,
-  [PriorityTypes.Lowest]: styles.lowest,
-};
-
 const Task: FC<TaskProps> = ({ task, priorities, onOpenBtnClick, onDeleteBtnClick }) => {
-  const priorityClassName = priorityStyles[task.priority];
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.top}>
@@ -41,9 +32,11 @@ const Task: FC<TaskProps> = ({ task, priorities, onOpenBtnClick, onDeleteBtnClic
       <div className={styles.bottom}>
         <div className={styles.priority}>
           <p className={styles.title}>Приоритет:</p>
-          <p className={classNames(priorityClassName, styles.title)}>
-            {priorities[task.priority]}
-          </p>
+          <InfoItem
+            description={priorities[task.priority]}
+            priority={task.priority}
+            classname={styles.title}
+          />
         </div>
         {task.status === TaskStatusTypes.Queue && (
           <div>

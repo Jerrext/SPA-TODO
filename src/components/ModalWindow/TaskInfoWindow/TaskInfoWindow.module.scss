@@ -61,37 +61,6 @@
   }
 }
 
-.infoItemTitle {
-  @include h5();
-  margin-bottom: 10px;
-}
-
-.infoItemDescr {
-  border-radius: $radius;
-  border: 1px solid $color-project;
-  padding: 15px 20px;
-}
-
-.highest {
-  color: $color-priority-highest;
-}
-
-.high {
-  color: $color-priority-high;
-}
-
-.medium {
-  color: $color-priority-medium;
-}
-
-.low {
-  color: $color-priority-low;
-}
-
-.lowest {
-  color: $color-priority-lowest;
-}
-
 .taskInfoWindow {
   max-width: 1400px;
 }

@@ -5,6 +5,7 @@ import Input from 'src/components/Input';
 import {
   ButtonType,
   InputType,
+  ModalWindowType,
   OptionType,
   OptionsListType,
 } from 'src/utils/@globalTypes';
@@ -26,9 +27,14 @@ import SelectComponent from 'src/components/SelectComponent/SelectComponent';
 import Button from 'src/components/Button/Button';
 import EmptyState from 'src/components/EmptyState/EmptyState';
 import classNames from 'classnames';
-import { deleteTask, updateTask } from 'src/redux/actions/boardActions';
+import {
+  deleteTask,
+  setCurrentSubtask,
+  updateTask,
+} from 'src/redux/actions/boardActions';
 import Task from 'src/components/Task/Task';
 import { setModalWindowType } from 'src/redux/actions/pageActions';
+import InfoItem from 'src/components/InfoItem/InfoItem';
 
 type TaskInfoWindowProps = {
   currentTask: TaskType | null;
@@ -43,14 +49,6 @@ enum PageType {
   TaskInfo,
   CreateSubtask,
 }
-
-const priorityStyles = {
-  [PriorityTypes.Highest]: styles.highest,
-  [PriorityTypes.High]: styles.high,
-  [PriorityTypes.Medium]: styles.medium,
-  [PriorityTypes.Low]: styles.low,
-  [PriorityTypes.Lowest]: styles.lowest,
-};
 
 const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   currentTask,
@@ -90,9 +88,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   const [subtaskPriorityTouched, setSubtaskPriorityTouched] = useState(false);
 
   //
-
-  const priorityClassName = currentTask ? priorityStyles[currentTask.priority] : '';
-
   const isTaskInfoPage = modalWindowPage === PageType.TaskInfo;
   const isCreateSubtaskPage = modalWindowPage === PageType.CreateSubtask;
 
@@ -188,7 +183,10 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
 
   // SUBTASK HANDLERS
 
-  const onOpenSubtaskBtnClick = () => {};
+  const onOpenSubtaskBtnClick = (subtask: SubtaskType) => () => {
+    dispatch(setCurrentSubtask(subtask));
+    dispatch(setModalWindowType(ModalWindowType.SubtaskInfo));
+  };
 
   const onDeleteSubtaskBtnClick = (deletedSubtaskId: number) => () => {
     if (currentTask) {
@@ -370,7 +368,7 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
         <div className={styles.windowWrapper}>
           <div className={styles.column}>
             <div>
-              <p className={styles.infoItemTitle}>Наименование:</p>
+              <InfoItem title="Наименование:" />
               {isTaskEditing ? (
                 <Input
                   value={title}
@@ -381,11 +379,11 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
                   errText={titleError}
                 />
               ) : (
-                <p className={styles.infoItemDescr}>{currentTask.title}</p>
+                <InfoItem description={currentTask.title} />
               )}
             </div>
             <div>
-              <p className={styles.infoItemTitle}>Описание:</p>
+              <InfoItem title="Описание:" />
               {isTaskEditing ? (
                 <Input
                   value={description}
@@ -394,12 +392,12 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
                   onChange={setDescription}
                 />
               ) : (
-                <p className={styles.infoItemDescr}>{currentTask.description}</p>
+                <InfoItem description={currentTask.description} emptyState="Пусто..." />
               )}
             </div>
             <div className={styles.row}>
               <div>
-                <p className={styles.infoItemTitle}>Приоритет:</p>
+                <InfoItem title="Приоритет:" />
                 {isTaskEditing ? (
                   <SelectComponent
                     placeholder="Выберите приоритет задачи"
@@ -409,13 +407,14 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
                     isSearchable={false}
                   />
                 ) : (
-                  <p className={classNames(styles.infoItemDescr, priorityClassName)}>
-                    {priorities[currentTask.priority]}
-                  </p>
+                  <InfoItem
+                    description={priorities[currentTask.priority]}
+                    priority={currentTask.priority}
+                  />
                 )}
               </div>
               <div>
-                <p className={styles.infoItemTitle}>Статус:</p>
+                <InfoItem title="Статус:" />
                 {isTaskEditing ? (
                   <SelectComponent
                     placeholder="Выберите статус задачи"
@@ -425,29 +424,29 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
                     isSearchable={false}
                   />
                 ) : (
-                  <p className={styles.infoItemDescr}>{statuses[currentTask.status]}</p>
+                  <InfoItem description={statuses[currentTask.status]} />
                 )}
               </div>
             </div>
             <div className={styles.row}>
               <div>
-                <p className={styles.infoItemTitle}>Дата создания:</p>
-                <p className={styles.infoItemDescr}>{currentTask.date_of_creation}</p>
+                <InfoItem
+                  title="Дата создания:"
+                  description={currentTask.date_of_creation}
+                />
               </div>
               <div>
-                <p className={styles.infoItemTitle}>Время в работе:</p>
-                <p className={styles.infoItemDescr}>{currentTask.start_date}</p>
+                <InfoItem title="Время в работе:" description={currentTask.start_date} />
               </div>
               <div>
-                <p className={styles.infoItemTitle}>Дата окончания:</p>
-                <p className={styles.infoItemDescr}>{currentTask.end_date}</p>
+                <InfoItem title="Дата окончания:" description={currentTask.end_date} />
               </div>
             </div>
           </div>
 
           <div className={styles.subtaskWrapper}>
             <div className={styles.subtaskHeader}>
-              <p className={styles.infoItemTitle}>Подзадачи:</p>
+              <InfoItem title="Подзадачи:" />
               <Button
                 title="Создать подзадачу"
                 type={ButtonType.PRIMARY}
@@ -457,14 +456,14 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
             </div>
             <div className={styles.subtasksBoard}>
               {currentTask.sub_tasks_list.length > 0 ? (
-                currentTask.sub_tasks_list.map((item: any) => {
+                currentTask.sub_tasks_list.map((subtask: SubtaskType) => {
                   return (
                     <Task
-                      key={item.id}
-                      task={item}
+                      key={subtask.id}
+                      task={subtask}
                       priorities={priorities}
-                      onDeleteBtnClick={onDeleteSubtaskBtnClick(item.id)}
-                      onOpenBtnClick={onOpenSubtaskBtnClick}
+                      onDeleteBtnClick={onDeleteSubtaskBtnClick(subtask.id)}
+                      onOpenBtnClick={onOpenSubtaskBtnClick(subtask)}
                     />
                   );
                 })

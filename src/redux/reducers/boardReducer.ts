@@ -12,13 +12,6 @@ const initialState: BoardState = {
     { id: 1, title: 'Development', statusType: TaskStatusTypes.Development, items: [] },
     { id: 2, title: 'Done', statusType: TaskStatusTypes.Done, items: [] },
   ],
-  // priorities: {
-  //   [PriorityTypes.Highest]: 'Очень высокий',
-  //   [PriorityTypes.High]: 'Высокий',
-  //   [PriorityTypes.Medium]: 'Средний',
-  //   [PriorityTypes.Low]: 'Низкий',
-  //   [PriorityTypes.Lowest]: 'Очень низкий',
-  // },
   priorities: [
     { value: `${PriorityTypes.Highest}`, label: 'Очень высокий', color: '#ff4800' },
     { value: `${PriorityTypes.High}`, label: 'Высокий', color: '#ff7b00' },
@@ -27,6 +20,7 @@ const initialState: BoardState = {
     { value: `${PriorityTypes.Lowest}`, label: 'Очень низкий', color: '#7bff00' },
   ],
   currentTask: null,
+  currentSubtask: null,
 };
 
 export const boardReducer = (
@@ -62,6 +56,11 @@ export const boardReducer = (
       return {
         ...state,
         currentTask: payload,
+      };
+    case BoardActionTypes.SET_CURRENT_SUBTASK:
+      return {
+        ...state,
+        currentSubtask: payload,
       };
     default:
       return state;

@@ -6,6 +6,7 @@ import {
   DeleteTaskPayload,
   GetTasksListAction,
   RemoveTaskFromListAction,
+  SetCurrentSubtaskAction,
   SetCurrentTaskAction,
   SetTaskAction,
   SetTaskStagesListAction,
@@ -53,5 +54,12 @@ export const setCurrentTask = (payload: TaskType): SetCurrentTaskAction => ({
 
 export const updateTask = (payload: UpdateTaskPayloadWithCallback): UpdateTaskAction => ({
   type: BoardActionTypes.UPDATE_TASK,
+  payload,
+});
+
+export const setCurrentSubtask = (
+  payload: SubtaskType | null,
+): SetCurrentSubtaskAction => ({
+  type: BoardActionTypes.SET_CURRENT_SUBTASK,
   payload,
 });
