@@ -3,20 +3,27 @@ import styles from './SubtaskInfoWindow.module.scss';
 import ModalWindow from '../ModalWindow';
 import Input from 'src/components/Input';
 import { InputType, ModalWindowType, OptionsListType } from 'src/utils/@globalTypes';
-import { getNewStatusOptions, setFieldRequiredErrorText } from 'src/utils/helpers';
+import {
+  getCurrentDate,
+  getNewStatusOptions,
+  setFieldRequiredErrorText,
+} from 'src/utils/helpers';
 import { useDispatch } from 'react-redux';
 import {
   СomputedProperty,
   TaskStatusTypes,
   SubtaskType,
+  TaskType,
+  PriorityTypes,
 } from 'src/redux/types/boardTypes';
 import SelectComponent from 'src/components/SelectComponent';
 import InfoItem from 'src/components/InfoItem';
 import { setModalWindowType } from 'src/redux/actions/pageActions';
-import { setCurrentSubtask } from 'src/redux/actions/boardActions';
+import { setCurrentSubtask, updateTask } from 'src/redux/actions/boardActions';
 
 type SubtaskInfoWindowProps = {
   currentSubtask: SubtaskType | null;
+  currentTask: TaskType | null;
   priorityOptions: OptionsListType;
   priorities: СomputedProperty;
   statusOptions: OptionsListType;
@@ -29,6 +36,7 @@ const SubtaskInfoWindow: FC<SubtaskInfoWindowProps> = ({
   priorities,
   statusOptions,
   statuses,
+  currentTask,
 }) => {
   const dispatch = useDispatch();
 
@@ -86,7 +94,46 @@ const SubtaskInfoWindow: FC<SubtaskInfoWindowProps> = ({
     }
   };
 
-  const onSaveSubtaskBtnClick = () => {};
+  const onSaveSubtaskBtnClick = () => {
+    if (currentTask && currentSubtask) {
+      const { id, projectId, sub_tasks_list } = currentTask;
+      const newCurrentSubtask: SubtaskType = {
+        id: currentSubtask.id,
+        parentTaskId: currentSubtask.parentTaskId,
+        title,
+        description,
+        end_date:
+          taskStatus === TaskStatusTypes.Done
+            ? getCurrentDate()
+            : currentSubtask.end_date,
+        date_of_creation: currentSubtask.date_of_creation,
+        num: currentSubtask.num,
+        priority: priority as PriorityTypes,
+        status: taskStatus as TaskStatusTypes,
+        start_date:
+          taskStatus === TaskStatusTypes.Development
+            ? getCurrentDate()
+            : currentSubtask.start_date,
+        order: 0,
+      };
+
+      dispatch(
+        updateTask({
+          data: {
+            taskId: id,
+            projectId: projectId,
+            data: {
+              sub_tasks_list: sub_tasks_list.map((subtask) =>
+                subtask.id === currentSubtask.id ? newCurrentSubtask : subtask,
+              ),
+            },
+            currentSubtask: newCurrentSubtask,
+          },
+          callback: () => setIsSubtaskEditing(false),
+        }),
+      );
+    }
+  };
 
   const cancelSubtaskEditingHandler = () => {
     setIsSubtaskEditing(false);
@@ -98,7 +145,25 @@ const SubtaskInfoWindow: FC<SubtaskInfoWindowProps> = ({
     setSubtaskFieldsValue();
   };
 
-  const onDeleteSubtaskBtnClick = () => {};
+  const onDeleteSubtaskBtnClick = () => {
+    if (currentTask) {
+      const { id, projectId, sub_tasks_list } = currentTask;
+      dispatch(
+        updateTask({
+          data: {
+            taskId: id,
+            projectId: projectId,
+            data: {
+              sub_tasks_list: sub_tasks_list.filter(
+                (subtask) => subtask.id !== currentSubtask?.id,
+              ),
+            },
+          },
+          callback: () => dispatch(setModalWindowType(ModalWindowType.TaskInfo)),
+        }),
+      );
+    }
+  };
 
   const onBackBtnClick = () => {
     dispatch(setModalWindowType(ModalWindowType.TaskInfo));
@@ -132,7 +197,7 @@ const SubtaskInfoWindow: FC<SubtaskInfoWindowProps> = ({
       title={`Подзадача ${currentSubtask?.num}`}
       btnTitle={!isSubtaskEditing ? 'Редактировать' : 'Сохранить'}
       onSubmit={!isSubtaskEditing ? onEditSubtaskBtnClick : onSaveSubtaskBtnClick}
-      isValid={!isValid || !isFieldsChanged}
+      isValid={isSubtaskEditing ? !isValid || !isFieldsChanged : false}
       cancelHandler={!isSubtaskEditing ? onBackBtnClick : cancelSubtaskEditingHandler}
       cancelTitle={!isSubtaskEditing ? 'Назад' : 'Отмена'}
       onDelete={onDeleteSubtaskBtnClick}>

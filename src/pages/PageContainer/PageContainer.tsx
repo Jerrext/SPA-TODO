@@ -63,6 +63,7 @@ const PageContainer = () => {
             priorities={priorities}
             statusOptions={statusOptions}
             currentSubtask={currentSubtask}
+            currentTask={currentTask}
             priorityOptions={priorityOptions}
             statuses={statuses}
           />

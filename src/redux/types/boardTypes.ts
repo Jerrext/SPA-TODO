@@ -107,6 +107,7 @@ type UpdateTaskPayload = {
   taskId: number;
   projectId: number;
   data: UpdateTaskData;
+  currentSubtask?: SubtaskType;
 };
 
 export type CreateTaskPayload = PayloadWithId<CreateTaskData>;

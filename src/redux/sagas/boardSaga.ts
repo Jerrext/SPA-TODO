@@ -14,6 +14,7 @@ import axios, { AxiosResponse } from 'axios';
 import {
   getTasksList,
   removeTaskFromList,
+  setCurrentSubtask,
   setCurrentTask,
   setTask,
   setTaskStagesList,
@@ -73,7 +74,7 @@ export function* deleteTaskWorker(action: DeleteTaskAction) {
 export function* updateTaskWorker(action: UpdateTaskAction) {
   const {
     callback,
-    data: { projectId, taskId, data },
+    data: { projectId, taskId, data, currentSubtask },
   } = action.payload;
   try {
     const { data: responseData }: AxiosResponse<TaskType> = yield call(
@@ -85,6 +86,9 @@ export function* updateTaskWorker(action: UpdateTaskAction) {
     yield put(setCurrentTask(responseData));
     yield put(getTasksList(projectId));
     callback && callback();
+    if (currentSubtask) {
+      yield put(setCurrentSubtask(currentSubtask));
+    }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.warn(error.message);
