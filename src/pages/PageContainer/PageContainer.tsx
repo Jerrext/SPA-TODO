@@ -12,6 +12,7 @@ import {
 import CreateTaskWindow from 'src/components/ModalWindow/CreateTaskWindow/CreateTaskWindow';
 import TaskInfoWindow from 'src/components/ModalWindow/TaskInfoWindow/TaskInfoWindow';
 import SubtaskInfoWindow from 'src/components/ModalWindow/SubtaskInfoWindow/SubtaskInfoWindow';
+import CreateSubtaskWindow from 'src/components/ModalWindow/CreateSubtaskWindow/CreateSubtaskWindow';
 
 const PageContainer = () => {
   const modalWindowType = useTypedSelector(PageSelectors.getModalWindowType);
@@ -19,7 +20,7 @@ const PageContainer = () => {
   // const taskStatusOptions = useTypedSelector(TasksSelectors.getTaskStatusOptions);
   const priorityOptions = useTypedSelector(TasksSelectors.getPriorityOptions);
   const taskNum = useTypedSelector(TasksSelectors.getTaskNum);
-  const curretnTask = useTypedSelector(TasksSelectors.getCurrentTask);
+  const currentTask = useTypedSelector(TasksSelectors.getCurrentTask);
   const currentSubtask = useTypedSelector(TasksSelectors.getCurrentSubtask);
   const statusOptions = useTypedSelector(TasksSelectors.getTaskStatusOptions);
   const priorities = useTypedSelector(TasksSelectors.getPriorities);
@@ -39,12 +40,19 @@ const PageContainer = () => {
             priorityOptions={priorityOptions}
           />
         );
+      case ModalWindowType.CreateSubtask:
+        return (
+          <CreateSubtaskWindow
+            currentTask={currentTask}
+            priorityOptions={priorityOptions}
+          />
+        );
       case ModalWindowType.TaskInfo:
         return (
           <TaskInfoWindow
             priorities={priorities}
             statusOptions={statusOptions}
-            currentTask={curretnTask}
+            currentTask={currentTask}
             priorityOptions={priorityOptions}
             statuses={statuses}
           />

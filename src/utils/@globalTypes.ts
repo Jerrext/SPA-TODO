@@ -9,6 +9,7 @@ export enum ModalWindowType {
   CreateProject,
   EditProject,
   CreateTask,
+  CreateSubtask,
   TaskInfo,
   SubtaskInfo,
 }

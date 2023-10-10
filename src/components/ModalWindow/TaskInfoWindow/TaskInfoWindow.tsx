@@ -6,7 +6,6 @@ import {
   ButtonType,
   InputType,
   ModalWindowType,
-  OptionType,
   OptionsListType,
 } from 'src/utils/@globalTypes';
 import {
@@ -17,7 +16,6 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   СomputedProperty,
-  SubtasksList,
   TaskStatusTypes,
   TaskType,
   PriorityTypes,
@@ -26,7 +24,6 @@ import {
 import SelectComponent from 'src/components/SelectComponent/SelectComponent';
 import Button from 'src/components/Button/Button';
 import EmptyState from 'src/components/EmptyState/EmptyState';
-import classNames from 'classnames';
 import {
   deleteTask,
   setCurrentSubtask,
@@ -38,17 +35,11 @@ import InfoItem from 'src/components/InfoItem/InfoItem';
 
 type TaskInfoWindowProps = {
   currentTask: TaskType | null;
-  // taskStatusOptions: OptionsListType;
   priorityOptions: OptionsListType;
   priorities: СomputedProperty;
   statusOptions: OptionsListType;
   statuses: СomputedProperty;
 };
-
-enum PageType {
-  TaskInfo,
-  CreateSubtask,
-}
 
 const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
   currentTask,
@@ -60,7 +51,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
 }) => {
   const dispatch = useDispatch();
 
-  const [modalWindowPage, setModalWindowPage] = useState(PageType.TaskInfo);
   const [newStatusOptions, setNewStatusOptions] = useState<OptionsListType>();
   const [isTaskEditing, setIsTaskEditing] = useState(false);
 
@@ -77,28 +67,10 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
 
   //
 
-  const [subtaskTitle, setsubtaskTitle] = useState('');
-  const [subtaskDescription, setSubtaskDescription] = useState('');
-  const [subtaskPriority, setSubtaskPriority] = useState('');
-
-  const [subtaskTitleError, setSubtaskTitleError] = useState('');
-  const [subtaskPriorityError, setSubtaskPriorityError] = useState('');
-
-  const [subtaskTitleTouched, setSubtaskTitleTouched] = useState(false);
-  const [subtaskPriorityTouched, setSubtaskPriorityTouched] = useState(false);
-
-  //
-  const isTaskInfoPage = modalWindowPage === PageType.TaskInfo;
-  const isCreateSubtaskPage = modalWindowPage === PageType.CreateSubtask;
-
-  // TASK CONSTANTS
-
   const isTitleChanged = title !== currentTask?.title;
   const isDescriptionChanged = description !== currentTask?.description;
   const isTaskStatusChanged = taskStatus !== currentTask?.status;
   const isPriorityChanged = priority !== currentTask?.priority;
-
-  // TASK HANDLERS
 
   const setTaskFieldsValue = () => {
     if (currentTask) {
@@ -207,79 +179,9 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
     }
   };
 
-  const clearSubtaskFormHandler = () => {
-    setModalWindowPage(PageType.TaskInfo);
-    setsubtaskTitle('');
-    setSubtaskDescription('');
-    setSubtaskPriority('');
-
-    setSubtaskTitleError('');
-    setSubtaskPriorityError('');
-
-    setSubtaskTitleTouched(false);
-    setSubtaskPriorityTouched(false);
-  };
-
   const onCreateSubTaskBtnClick = () => {
-    setModalWindowPage(PageType.CreateSubtask);
+    dispatch(setModalWindowType(ModalWindowType.CreateSubtask));
   };
-
-  const onSaveSubtaskBtnClick = () => {
-    if (currentTask) {
-      const { id, projectId, sub_tasks_list } = currentTask;
-      const subtaskId = sub_tasks_list.map((item) => item.id);
-      const subtaskNumbers = sub_tasks_list.map((item) => item.num);
-
-      dispatch(
-        updateTask({
-          data: {
-            taskId: id,
-            projectId: projectId,
-            data: {
-              sub_tasks_list: [
-                ...sub_tasks_list,
-                {
-                  title: subtaskTitle,
-                  description: subtaskDescription,
-                  date_of_creation: getCurrentDate(),
-                  end_date: '—',
-                  priority: subtaskPriority as PriorityTypes,
-                  status: TaskStatusTypes.Queue,
-                  start_date: '—',
-                  parentTaskId: currentTask?.id,
-                  id: sub_tasks_list.length > 0 ? Math.max(...subtaskId) + 1 : 0,
-                  num: sub_tasks_list.length > 0 ? Math.max(...subtaskNumbers) + 1 : 1,
-                  order: 0,
-                },
-              ],
-            },
-          },
-          callback: () => {
-            setModalWindowPage(PageType.TaskInfo);
-            clearSubtaskFormHandler();
-          },
-        }),
-      );
-    }
-  };
-
-  // useEffect(() => {
-  //   console.log();
-  // }, [subtasksList]);
-
-  // const onSaveBtnClick = () => {};
-
-  // useEffect(() => {
-  //   if (currentTask) {
-  //     const { title, priority: taskPriority, description } = currentTask;
-
-  //     setTitle(title);
-  //     setPriority(taskPriority.toString());
-  //     setDescription(description);
-  //   }
-  // }, [currentTask]);
-
-  // useEffect(() => {}, [currentTask]);
 
   useEffect(() => {
     setTaskFieldsValue();
@@ -303,68 +205,17 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
     }
   }, [currentTask, title, description, taskStatus, priority]);
 
-  //SUBTASK VALIDATION
-
-  useEffect(() => {
-    setFieldRequiredErrorText(subtaskTitleTouched, subtaskTitle, setSubtaskTitleError);
-  }, [subtaskTitle, subtaskTitleTouched]);
-
-  useEffect(() => {
-    setFieldRequiredErrorText(
-      subtaskPriorityTouched,
-      subtaskPriority,
-      setSubtaskPriorityError,
-    );
-  }, [subtaskPriority, subtaskPriorityTouched]);
-
-  // const isFieldsChanged = useMemo(() => {
-  //   if (currentTask) {
-  //     return (
-  //       title !== currentTask.title ||
-  //       description !== currentTask.description ||
-  //       priority !== currentTask.priority.toString()
-  //     );
-  //   }
-  // }, [currentTask, title, description, priority]);
-
-  const isSubtaskValid = useMemo(() => {
-    return (
-      subtaskTitleError.length === 0 &&
-      subtaskPriorityError.length === 0 &&
-      subtaskTitle.length > 0 &&
-      subtaskPriority.length > 0
-    );
-  }, [subtaskTitleError, subtaskPriorityError, subtaskTitle, subtaskPriority]);
-
   return (
     <ModalWindow
-      title={isCreateSubtaskPage ? 'Создание подзадачи' : `Задача ${currentTask?.num}`}
-      btnTitle={isTaskInfoPage && !isTaskEditing ? 'Редактировать' : 'Сохранить'}
-      onSubmit={
-        isTaskInfoPage && !isTaskEditing
-          ? onEditTaskBtnClick
-          : isTaskInfoPage && isTaskEditing
-          ? onSaveTaskBtnClick
-          : onSaveSubtaskBtnClick
-      }
-      isValid={
-        isCreateSubtaskPage
-          ? !isSubtaskValid
-          : isTaskInfoPage && isTaskEditing
-          ? !isTaskEditingValid || !isTaskFieldsChanged
-          : undefined
-      }
-      cancelHandler={
-        isCreateSubtaskPage
-          ? clearSubtaskFormHandler
-          : isTaskInfoPage && isTaskEditing
-          ? cancelTaskEditingHandler
-          : undefined
-      }
-      cancelTitle={isTaskInfoPage && !isTaskEditing ? 'Закрыть' : 'Отмена'}
-      onDelete={isTaskInfoPage ? onDeleteTaskBtnClick : undefined}
-      classname={isTaskInfoPage ? styles.taskInfoWindow : undefined}>
-      {isTaskInfoPage && currentTask && (
+      title={`Задача ${currentTask?.num}`}
+      btnTitle={!isTaskEditing ? 'Редактировать' : 'Сохранить'}
+      onSubmit={!isTaskEditing ? onEditTaskBtnClick : onSaveTaskBtnClick}
+      isValid={isTaskEditing ? !isTaskEditingValid || !isTaskFieldsChanged : false}
+      cancelHandler={isTaskEditing ? cancelTaskEditingHandler : undefined}
+      cancelTitle={!isTaskEditing ? 'Закрыть' : 'Отмена'}
+      onDelete={onDeleteTaskBtnClick}
+      classname={styles.taskInfoWindow}>
+      {currentTask && (
         <div className={styles.windowWrapper}>
           <div className={styles.column}>
             <div>
@@ -475,40 +326,6 @@ const TaskInfoWindow: FC<TaskInfoWindowProps> = ({
               )}
             </div>
           </div>
-        </div>
-      )}
-      {isCreateSubtaskPage && (
-        <div className={styles.column}>
-          <div className={styles.row}>
-            <Input
-              value={subtaskTitle}
-              title="Название подзадачи"
-              placeholder="Введите название подзадачи"
-              type={InputType.TEXT}
-              onChange={setsubtaskTitle}
-              onBlur={setSubtaskTitleTouched}
-              errText={subtaskTitleError}
-              required
-            />
-            <SelectComponent
-              title="Приоритет"
-              placeholder="Выберите приоритет подзадачи"
-              optionsList={priorityOptions}
-              currentValue={subtaskPriority}
-              setSelecValue={setSubtaskPriority}
-              errText={subtaskPriorityError}
-              onBlur={setSubtaskPriorityTouched}
-              isSearchable={false}
-              required
-            />
-          </div>
-          <Input
-            value={subtaskDescription}
-            title="Описание подзадачи"
-            placeholder="Опишите подзадачу"
-            type={InputType.TEXTAREA}
-            onChange={setSubtaskDescription}
-          />
         </div>
       )}
     </ModalWindow>
