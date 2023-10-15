@@ -22,7 +22,7 @@ import {
 import { setModalWindowType, toggleIsLoading } from '../actions/pageActions';
 import { LoadingTypes } from '../types/pageTypes';
 
-export function* getTasksListWorker(action: GetTasksListAction) {
+function* getTasksListWorker(action: GetTasksListAction) {
   try {
     yield put(toggleIsLoading(LoadingTypes.TasksList));
     const { data }: AxiosResponse<TasksList> = yield call(
@@ -38,7 +38,7 @@ export function* getTasksListWorker(action: GetTasksListAction) {
   }
 }
 
-export function* createTaskWorker(action: CreateTaskAction) {
+function* createTaskWorker(action: CreateTaskAction) {
   const { id, data } = action.payload;
   try {
     const { data: responseData }: AxiosResponse<TaskType> = yield call(
@@ -55,7 +55,7 @@ export function* createTaskWorker(action: CreateTaskAction) {
   }
 }
 
-export function* deleteTaskWorker(action: DeleteTaskAction) {
+function* deleteTaskWorker(action: DeleteTaskAction) {
   const {
     data: { projectId, taskId },
     callback,
@@ -71,7 +71,7 @@ export function* deleteTaskWorker(action: DeleteTaskAction) {
   }
 }
 
-export function* updateTaskWorker(action: UpdateTaskAction) {
+function* updateTaskWorker(action: UpdateTaskAction) {
   const {
     callback,
     data: { projectId, taskId, data, currentSubtask },

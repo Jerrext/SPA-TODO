@@ -67,7 +67,7 @@ function* deleteSingleProjectWorker(action: DeleteSingleProjectAction) {
   }
 }
 
-export function* getSingleProjectWorker(action: GetSingleProjectAction) {
+function* getSingleProjectWorker(action: GetSingleProjectAction) {
   try {
     yield put(toggleIsLoading(LoadingTypes.SingleProject));
     const { data }: AxiosResponse<Project> = yield call(
